@@ -41,9 +41,12 @@ public class DiceSlotObject : MonoBehaviour, IDropHandler
 
 		if (diceSlot.allowedValues.Contains(value))
 		{
-			diceSlot.TriggerWithValue(value);
+			//diceSlot.TriggerWithValue(value);
 
 			Destroy(diceObject.gameObject);
+
+			diceSlot.athlete.team.runtimeData.ActivateAthlete(diceSlot.athlete, diceSlot.action);
+			FindObjectOfType<GameController>().AwaitUserTileSelection(diceSlot.athlete.currentTile, value, false);
 		}
 	}
 }

@@ -44,8 +44,10 @@ public class RuntimeData
 			{
 				field[c, r] = new Tile();
 
-				if(c >= columns/2)
+				if (c > columns / 2)
 					field[c, r].SetForTeam(opponentTeam);
+				else if (c == columns / 2)
+					field[c, r].SetForTeam(null);
 				else
 					field[c, r].SetForTeam(playerTeam);
 			}
@@ -62,7 +64,7 @@ public class RuntimeData
 		}
 	}
 
-	public int GetFieldIntForTile(Tile tile, bool horizontal)
+	public Vector2Int GetFieldIntForTile(Tile tile)
 	{
 		for(int r = 0; r < rows; r++)
 		{
@@ -70,16 +72,120 @@ public class RuntimeData
 			{
 				if (field[c, r] == tile)
 				{
-					if (horizontal)
-						return c;
-					else
-						return r;
+					return new Vector2Int(c, r);
 				}
 			}
 		}
 
 		Debug.Log("ERROR: Tile doesn't exist");
-		return 0;
+		return new Vector2Int(0, 0);
+	}
+
+	public List<Tile> GetAdjacentTiles(Tile tile, int range, bool blockedByAthletes)
+	{
+		List<Tile> tiles = new List<Tile>();
+
+		Vector2Int tilePosition = GetFieldIntForTile(tile);
+
+		for (int i = range; i == range; i++)
+		{
+			int right = tilePosition.x + i;
+			if (right < columns)
+			{
+				Tile potentialTile = field[right, tilePosition.y];
+				if (!blockedByAthletes || !CheckForAthleteInTile(potentialTile))
+					tiles.Add(potentialTile);
+			}
+
+			int left = tilePosition.x - i;
+			if (left >= 0)
+			{
+				Tile potentialTile = field[left, tilePosition.y];
+				if (!blockedByAthletes || !CheckForAthleteInTile(potentialTile))
+					tiles.Add(potentialTile);
+			}
+
+			int up = tilePosition.y + i;
+			if (up < rows)
+			{
+				Tile potentialTile = field[tilePosition.x, up];
+				if (!blockedByAthletes || !CheckForAthleteInTile(potentialTile))
+					tiles.Add(potentialTile);
+			}
+
+			int down = tilePosition.y - i;
+			if (down >= 0)
+			{
+				Tile potentialTile = field[tilePosition.x, down];
+				if (!blockedByAthletes || !CheckForAthleteInTile(potentialTile))
+					tiles.Add(potentialTile);
+			}
+		}
+
+		Debug.Log("NUm tiles " + tiles.Count);
+		return tiles;
+	}
+
+	public List<Tile> GetAllTilesBetween(Tile startTile, Tile endTile)
+	{
+		List<Tile> tilesBetween = new List<Tile>();
+
+		Vector2Int startTilePosition = GetFieldIntForTile(startTile);
+		Vector2Int endTilePosition = GetFieldIntForTile(endTile);
+
+		if (startTilePosition.x == endTilePosition.x)
+		{
+			int difference = endTilePosition.y - startTilePosition.y;
+
+			if(difference > 0)
+			{
+				for(int i = startTilePosition.y + 1; i < endTilePosition.y; i++)
+				{
+					tilesBetween.Add(field[startTilePosition.x, i]);
+				}
+			}
+			else if(difference < 0)
+			{
+				for (int i = startTilePosition.y - 1; i > endTilePosition.y; i--)
+				{
+					tilesBetween.Add(field[startTilePosition.x, i]);
+				}
+			}
+		}
+		else if(startTilePosition.y == endTilePosition.y)
+		{
+			int difference = endTilePosition.x - startTilePosition.x;
+
+			if (difference > 0)
+			{
+				for (int i = startTilePosition.x + 1; i < endTilePosition.x; i++)
+				{
+					tilesBetween.Add(field[i, startTilePosition.y]);
+				}
+			}
+			else if (difference < 0)
+			{
+				for (int i = startTilePosition.x - 1; i > endTilePosition.x; i--)
+				{
+					tilesBetween.Add(field[i, startTilePosition.y]);
+				}
+			}
+		}
+		else
+		{
+			Debug.Log("Error - start and end tiles have no matching row/column");
+		}
+
+		Debug.Log("Tiles between count " + tilesBetween.Count);
+		return tilesBetween;
+	}
+
+	public bool CheckForAthleteInTile(Tile tile)
+	{
+		if (tile.occupier != null)
+			return true;
+		else
+			return false;
 	}
 
 	public void SpawnBalls()
@@ -106,5 +212,28 @@ public class RuntimeData
 
 		turn++;
 		playerTurn = !playerTurn;
+	}
+
+	private Athlete activeAthlete = null;
+	private Athlete.Action activeAction = null;
+	public void ActivateAthlete(Athlete athlete, Athlete.Action action)
+	{
+		activeAthlete = athlete;
+		activeAction = action;
+	}
+
+	public void ResolveActiveAthleteAction(Tile tile)
+	{
+		activeAction.Invoke(tile);
+	}
+
+	public void TackleAthlete(Athlete tackler, Athlete tacklee)
+	{
+		if(tacklee.heldBall != null && tackler.heldBall == null)
+		{
+			tackler.PossessBall(tacklee.heldBall);
+		}
+
+		tacklee.MoveToTile(tacklee.GetNearestAdjacentTile());
 	}
 }

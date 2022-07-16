@@ -17,36 +17,35 @@ public class DiceSlot
 
 	public string description;
 
-	public delegate void Action(int value);
-	Action action;
+	public Athlete.Action action;
 
-	public DiceSlot(Athlete newAthlete, Action newAction, string newDescription, List<int> newAllowedValues, List<ValueModifier> newValueModifiers)
+	public DiceSlot(Athlete newAthlete, Athlete.Action newAction, string newDescription, List<int> newAllowedValues)
 	{
 		athlete = newAthlete;
 
 		for (int i = 0; i < newAllowedValues.Count; i++)
 			allowedValues.Add(newAllowedValues[i]);
 
-		for (int i = 0; i < newValueModifiers.Count; i++)
-			valueModifiers.Add(newValueModifiers[i]);
+		//for (int i = 0; i < newValueModifiers.Count; i++)
+		//	valueModifiers.Add(newValueModifiers[i]);
 
 		description = newDescription;
 
 		action = newAction;
 	}
 
-	public void TriggerWithValue(int value)
-	{
-		Debug.Log("Success");
+	//public void TriggerWithValue(int value)
+	//{
+	//	Debug.Log("Success");
 
-		int passedValue = value;
+	//	int passedValue = value;
 
-		if (valueModifiers.Contains(ValueModifier.ClampedTo1))
-			passedValue = 1;
+	//	if (valueModifiers.Contains(ValueModifier.ClampedTo1))
+	//		passedValue = 1;
 
-		if (valueModifiers.Contains(ValueModifier.OddBecomesNegative) && value % 2 == 1)
-			passedValue = -passedValue;
+	//	if (valueModifiers.Contains(ValueModifier.OddBecomesNegative) && value % 2 == 1)
+	//		passedValue = -passedValue;
 
-		action.Invoke(passedValue);
-	}
+	//	action.Invoke(passedValue);
+	//}
 }

@@ -5,36 +5,58 @@ using UnityEngine.UI;
 
 public class BallObject : MonoBehaviour
 {
-	private Image image;
+	public Image ballImage;
 
 	private GameController gameController;
 
-	private void Start()
+	private void Awake()
 	{
-		image = GetComponent<Image>();
-
 		gameController = FindObjectOfType<GameController>();
 	}
-	public void MoveToTileObject(TileObject tileObject)
+
+	public void QueueDisplayMovement(Tile tile)
 	{
-		LeanTween.move(gameObject, tileObject.transform.position, 0.3f);
+		gameController.AddToAnimationQueue(() => DisplayMovement(tile, GameController.animationSpeed_Move));
 	}
-	public void DisplayPosession(Athlete athlete)
+	private void DisplayMovement(Tile tile, float speed)
 	{
-		//LeanTween.move(gameObject, athlete.athleteGameObject.transform.position, 0.2f).setOnComplete(() => CompletePossession(athlete));
-		transform.SetParent(athlete.athleteGameObject.transform);
-		transform.localPosition = Vector3.zero;
-		image.color = athlete.team.teamColor;
+		LeanTween.move(gameObject, tile.tileGameObject.transform.position, speed);
+
+		gameController.CompleteQueueActionAfterDelay(speed);
 	}
 
-	public void DisplayReset(Vector3 spawnPosition)
+	public void QueueDisplayPossession(Athlete athlete)
 	{
-		image.color = Color.white;
+		gameController.AddToAnimationQueue(() => DisplayPossession(athlete, GameController.animationSpeed_BallPossession));
+	}
+	private void DisplayPossession(Athlete athlete, float duration)
+	{
+		transform.SetParent(athlete.athleteGameObject.displayBallHolder);
+		LeanTween.moveLocal(gameObject, Vector3.zero, duration);
+		LeanTween.value(gameObject, UpdateColor, ballImage.color, athlete.team.teamColor, duration);
+
+		gameController.CompleteQueueActionAfterDelay(0f);
+	}
+
+	private void UpdateColor(Color value)
+	{
+		ballImage.color = value;
+	}
+
+	public void QueueDisplayReset(Vector3 spawnPosition)
+	{
+		gameController.AddToAnimationQueue(() => DisplayReset(spawnPosition, GameController.animationSpeed_BallReset));
+	}
+	private void DisplayReset(Vector3 spawnPosition, float duration)
+	{
+		ballImage.color = Color.white;
 
 		transform.SetParent(gameController.ballGameObjectParent);
 		transform.position = spawnPosition;
 		transform.localScale = Vector3.zero;
 
-		LeanTween.scale(gameObject, Vector3.one, 0.5f);
+		LeanTween.scale(gameObject, Vector3.one, duration);
+
+		gameController.CompleteQueueActionAfterDelay(duration);
 	}
 }

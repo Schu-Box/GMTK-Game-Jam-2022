@@ -39,7 +39,7 @@ public class Team
 		for(int i = 0; i < athletesInPlay.Count; i++)
 		{
 			Vector2Int startingPosition = startingPositions[i];
-			athletesInPlay[i].AssignToTile(runtimeData.field[startingPosition.x, startingPosition.y]);
+			athletesInPlay[i].MoveToTile(runtimeData.field[startingPosition.x, startingPosition.y]);
 		}
 	}
 

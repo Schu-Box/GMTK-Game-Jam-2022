@@ -11,6 +11,8 @@ public class Ball
 
 	private Vector2Int spawn;
 
+	private List<Tile> movementQueue = new List<Tile>();
+
 	private RuntimeData runtimeData;
 	public Ball(RuntimeData data)
 	{
@@ -24,9 +26,28 @@ public class Ball
 		AssignToTile(runtimeData.field[spawn.x, spawn.y]);
 	}
 
+	public void AddToMovementQueue(Tile tile)
+	{
+		movementQueue.Add(tile);
+	}
+
+	public void AbortMovementQueue()
+	{
+		movementQueue = new List<Tile>();
+	}
+
+	public void AttemptMovement()
+	{
+		while (movementQueue.Count > 0)
+		{
+			AssignToTile(movementQueue[0]);
+		}
+	}
+
 	public void AssignToTile(Tile tile)
 	{
-		ballGameObject.MoveToTileObject(tile.tileGameObject);
+		if (looseInTile != null)
+			looseInTile.ballLooseInTile = null;
 
 		if (tile.occupier != null)
 		{
@@ -37,6 +58,8 @@ public class Ball
 			looseInTile = tile;
 			tile.AssignLooseBall(this);
 		}
+
+		ballGameObject.QueueDisplayMovement(tile);
 	}
 
 	public void AssignToAthlete(Athlete athlete) //Must always go through Athlete.PossessBall
@@ -47,7 +70,7 @@ public class Ball
 
 		currentPossessor = athlete;
 
-		ballGameObject.DisplayPosession(athlete);
+		ballGameObject.QueueDisplayPossession(athlete);
 	}
 
 	public void ResetBall()
@@ -66,7 +89,7 @@ public class Ball
 
 		Tile spawnTile = runtimeData.field[spawn.x, spawn.y];
 
-		ballGameObject.DisplayReset(spawnTile.tileGameObject.transform.position);
+		ballGameObject.QueueDisplayReset(spawnTile.tileGameObject.transform.position);
 
 		AssignToTile(spawnTile);
 	}
