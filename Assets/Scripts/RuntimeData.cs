@@ -16,14 +16,14 @@ public class RuntimeData
 	public int columns = 8;
 	//public List<Athlete> athletesInPlay = new List<Athlete>();
 
-	public GameController gameController;
+	[HideInInspector] public GameController gameController;
 
 	public void Setup(GameController gc)
 	{
 		gameController = gc;
 
-		playerTeam.Setup(this);
-		opponentTeam.Setup(this);
+		playerTeam.Setup(this, gameController.playerTeamController);
+		opponentTeam.Setup(this, gameController.opponentTeamController);
 
 		SetField();
 		gameController.SetFieldObjects();

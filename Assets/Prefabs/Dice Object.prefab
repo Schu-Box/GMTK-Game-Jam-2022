@@ -10,8 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4227549875747806693}
   - component: {fileID: 7888767769293181108}
+  - component: {fileID: 5181272511180589793}
   - component: {fileID: 6611487033457828745}
   - component: {fileID: 7106855046324070470}
+  - component: {fileID: 983704427372479307}
   m_Layer: 5
   m_Name: Dice Object
   m_TagString: Untagged
@@ -37,7 +39,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7888767769293181108
 MonoBehaviour:
@@ -49,6 +51,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d37b424ca590f5b46b08b24c9781ce5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  diceImage: {fileID: 7106855046324070470}
+--- !u!114 &5181272511180589793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5919389293026962319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd1182a5a5bc8114282d77b377071b18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!222 &6611487033457828745
@@ -89,3 +104,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &983704427372479307
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5919389293026962319}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

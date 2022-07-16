@@ -4,19 +4,27 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public TeamUIController playerTeamController;
+    public TeamUIController opponentTeamController;
     public RuntimeData runtimeData = new RuntimeData();
 
     public Transform fieldGrid;
    
     public Sprite goalImage;
 
-    public Transform athleteGameObjectParent;
-    public GameObject athleteGameObjectPrefab;
     public Transform ballGameObjectParent;
     public GameObject ballGameObjectPrefab;
+    public GameObject diceGameObjectPrefab;
+    public GameObject athleteCardGameObjectPrefab;
+    public GameObject athleteGameObjectPrefab;
 
-	private void Start()
+
+    public List<Sprite> diceFaceSprites;
+
+    private void Start()
 	{
+        DeleteAllChidlren(ballGameObjectParent);
+
         StartCoroutine(DelayedStart());
 	}
 
@@ -42,19 +50,18 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void GenerateAthleteGameObject(Athlete athlete)
-	{
-        AthleteObject newAthleteObject = Instantiate(athleteGameObjectPrefab, athleteGameObjectParent).GetComponent<AthleteObject>();
-        athlete.athleteGameObject = newAthleteObject;
-
-        if (athlete.team == runtimeData.opponentTeam)
-            newAthleteObject.FlipImage();
-	}
-
     public void GenerateBallGameObject(Ball ball)
 	{
         BallObject newBallObject = Instantiate(ballGameObjectPrefab, ballGameObjectParent).GetComponent<BallObject>();
         ball.ballGameObject = newBallObject;
+	}
+
+    public void DeleteAllChidlren(Transform parent)
+	{
+        for(int i = 0; i < parent.childCount; i++)
+		{
+            Destroy(parent.GetChild(i).gameObject);
+		}
 	}
 
     public void UserTriggerNextTurn()

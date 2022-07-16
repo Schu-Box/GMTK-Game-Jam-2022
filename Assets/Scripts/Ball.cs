@@ -26,6 +26,8 @@ public class Ball
 
 	public void AssignToTile(Tile tile)
 	{
+		ballGameObject.MoveToTileObject(tile.tileGameObject);
+
 		if (tile.occupier != null)
 		{
 			tile.occupier.PossessBall(this);
@@ -35,8 +37,6 @@ public class Ball
 			looseInTile = tile;
 			tile.AssignLooseBall(this);
 		}
-
-		ballGameObject.MoveToTileObject(looseInTile.tileGameObject);
 	}
 
 	public void AssignToAthlete(Athlete athlete) //Must always go through Athlete.PossessBall

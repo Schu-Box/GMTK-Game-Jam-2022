@@ -14,9 +14,15 @@ public class Athlete
 
 	public Ball heldBall;
 
+	public List<DiceSlot> diceSlots = new List<DiceSlot>();
+
 	public Athlete(Team assignedTeam)
 	{
 		team = assignedTeam;
+
+		diceSlots.Add(new DiceSlot(this, MoveHorizontal, "Move Forward 1", new List<int> { 1, 2, 3 }, new List<ValueModifier> { ValueModifier.ClampedTo1 }));
+		diceSlots.Add(new DiceSlot(this, MoveVertical, "Move Up 1" + '\n' + "on even," + '\n' + "Move Down 1" + '\n' + "on odd", new List<int> { 3, 4, 5, 6 }, new List<ValueModifier> { ValueModifier.ClampedTo1, ValueModifier.OddBecomesNegative }));
+		//diceSlots.Add(new DiceSlot(this));
 	}
 
 	public void AssignToTile(Tile tile)
@@ -31,45 +37,17 @@ public class Athlete
 		athleteGameObject.MoveToTileObject(currentTile.tileGameObject);
 	}
 
-    public void PerformAction()
-	{
-		int rando = Random.Range(0, 6);
-		switch (rando)
-		{
-			case 0:
-			case 4:
-			case 5:
-				MoveHorizontal(true);
-				break;
-			case 1:
-				MoveHorizontal(false);
-				break;
-			case 2:
-				MoveVertical(true);
-				break;
-			case 3:
-				MoveVertical(false);
-				break;
-		}
-	}
-
-	public void MoveHorizontal(bool towardsGoal)
+	public void MoveHorizontal(int value)
 	{
 		int newColumn = team.runtimeData.GetFieldIntForTile(currentTile, true);
 
 		if (team == team.runtimeData.playerTeam)
 		{
-			if (towardsGoal)
-				newColumn++;
-			else
-				newColumn--;
+			newColumn += value;
 		}
 		else
 		{
-			if (towardsGoal)
-				newColumn--;
-			else
-				newColumn++;
+			newColumn -= value;
 		}
 
 		newColumn = Mathf.Clamp(newColumn, 0, team.runtimeData.columns - 1);
@@ -78,14 +56,11 @@ public class Athlete
 		AssignToTile(newTile);
 	}
 
-	public void MoveVertical(bool up)
+	public void MoveVertical(int value)
 	{
 		int newRow = team.runtimeData.GetFieldIntForTile(currentTile, false);
 
-		if (up)
-			newRow++;
-		else
-			newRow--;
+		newRow += value;
 
 		newRow = Mathf.Clamp(newRow, 0, team.runtimeData.rows - 1);
 
