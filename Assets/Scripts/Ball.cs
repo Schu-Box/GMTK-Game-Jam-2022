@@ -105,7 +105,6 @@ public class Ball
 		AbortMovementQueue();
 
 		//AddToMovementQueue(runtimeData.GetAdjacentTiles(tileDeflectedFrom), 1, false);
-		
 	}
 
 	public void AssignPossessor(Athlete newPossessor)

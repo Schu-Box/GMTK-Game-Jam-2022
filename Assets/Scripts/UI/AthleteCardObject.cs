@@ -10,7 +10,9 @@ public class AthleteCardObject : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private Athlete athlete;
 
     public TextMeshProUGUI athleteTitle;
-    public Image athleteImage;
+    public Image athleteImageParent;
+    public Image athleteImageForeground;
+    public Image athleteImageJersey;
     public List<DiceSlotObject> diceSlotObjects;
     
     public void SetForAthlete(Athlete a)
@@ -18,9 +20,15 @@ public class AthleteCardObject : MonoBehaviour, IPointerEnterHandler, IPointerEx
         athlete = a;
 
         athleteTitle.text = athlete.name;
-        //athleteImage.sprite = athlete.sprite;
+		athleteImageParent.sprite = athlete.sprite;
+        athleteImageForeground.sprite = athlete.sprite;
+        athleteImageJersey.sprite = athlete.sprite;
+        athleteImageJersey.color = athlete.team.teamColor;
 
-        for(int i = diceSlotObjects.Count - 1; i >= 0; i--)
+        if (athlete.team != athlete.team.runtimeData.playerTeam) //If this athlete belongs to opponent team, flip the image
+            athleteImageParent.transform.eulerAngles = new Vector3(0f, 180f, 0f);
+
+		for (int i = diceSlotObjects.Count - 1; i >= 0; i--)
 		{
             if(i < athlete.diceSlots.Count)
             {

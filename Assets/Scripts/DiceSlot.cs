@@ -10,6 +10,7 @@ public class DiceSlot
 	public ActionType actionType;
 	public string description;
 
+	public string allowedValueDescription;
 	public List<int> allowedValues = new List<int>();
 
 	public bool ballRequired;
@@ -38,6 +39,7 @@ public class DiceSlot
 		actionType = template.actionType;
 		description = template.description;
 
+		allowedValueDescription = template.allowedValueDescription;
 		for (int i = 0; i < template.allowedValues.Count; i++)
 			allowedValues.Add(template.allowedValues[i]);
 
@@ -53,6 +55,9 @@ public class DiceSlot
 				break;
 			case ActionType.Kick:
 				action = athlete.KickToTile;
+				break;
+			case ActionType.Juke:
+				action = athlete.DiagonalMoveToTile;
 				break;
 		}
 	}

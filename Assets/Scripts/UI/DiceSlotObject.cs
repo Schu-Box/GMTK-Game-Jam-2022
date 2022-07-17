@@ -11,6 +11,7 @@ public class DiceSlotObject : MonoBehaviour, IDropHandler
 
 	public List<GameObject> diceImages;
 	public TextMeshProUGUI descriptionText;
+	public TextMeshProUGUI allowedValuesText;
 
 	public Image lockedImage;
 
@@ -29,6 +30,12 @@ public class DiceSlotObject : MonoBehaviour, IDropHandler
 
 		for(int i = 0; i < diceImages.Count; i++)
 			diceImages[i].SetActive(false);
+
+		if(diceSlot.allowedValueDescription != "")
+		{
+			allowedValuesText.gameObject.SetActive(true);
+			allowedValuesText.text = diceSlot.allowedValueDescription;
+		}	
 
 		for(int i = 0; i < diceSlot.allowedValues.Count; i++)
 			diceImages[diceSlot.allowedValues[i] - 1].SetActive(true);

@@ -6,6 +6,11 @@ using TMPro;
 
 public class TeamUIController : MonoBehaviour
 {
+    public bool leftSide = true;
+    public GameObject userToggleObject;
+    public Image userToggleImage;
+    public TextMeshProUGUI userToggleText;
+
     public Transform athleteGameObjectParent;
     public Transform athleteCardGameObjectParent;
 
@@ -15,12 +20,19 @@ public class TeamUIController : MonoBehaviour
     private Vector3 teamTurnParentOnPosition;
     private Vector3 teamTurnParentOffPosition;
 
+    public GameObject scoreBoard;
     public TextMeshProUGUI scoreboardText;
+    private float scoreBoardOffset = 20f;
+    private float scoreBoardScaleIncrease = 1.2f;
+    private Color defaultUserToggleImageColor;
 
     private GameController gameController;
 
+
 	private void Start()
 	{
+        defaultUserToggleImageColor = userToggleImage.color;
+
         gameController = FindObjectOfType<GameController>();
         gameController.DeleteAllChidlren(athleteGameObjectParent);
         gameController.DeleteAllChidlren(athleteCardGameObjectParent);
@@ -29,8 +41,6 @@ public class TeamUIController : MonoBehaviour
         teamTurnParentOnPosition = teamTurnParent.transform.localPosition;
         teamTurnParentOffPosition = teamTurnParentOnPosition;
         teamTurnParentOffPosition.x = teamTurnParentOnPosition.x * 1.5f;
-
-        Debug.Log(teamTurnParent.transform.localPosition);
 
         teamTurnParent.transform.localPosition = teamTurnParentOffPosition;
     }
@@ -65,7 +75,20 @@ public class TeamUIController : MonoBehaviour
 
         gameController.PlayAudio(gameController.goalScored);
 
-        //TODO: Animate
+        Vector3 scoreBoardStartPosition = scoreBoard.transform.position;
+        Vector3 newScoreBoardPosition = scoreBoardStartPosition;
+        newScoreBoardPosition.y += scoreBoardOffset;
+        LeanTween.move(scoreBoard, newScoreBoardPosition, duration / 2f).setEaseInCubic().setOnComplete(() =>
+        {
+                LeanTween.move(scoreBoard, scoreBoardStartPosition, duration / 2f).setEaseOutBack();
+                
+        });
+
+        Vector3 newScoreBoardScale = scoreBoard.transform.localScale * scoreBoardScaleIncrease;
+        LeanTween.scale(scoreBoard, newScoreBoardScale, duration / 2f).setEaseOutExpo().setOnComplete(() =>
+        {
+            LeanTween.scale(scoreBoard, Vector3.one, duration / 2f).setEaseInCubic();
+        });
 
         gameController.CompleteQueueActionAfterDelay(duration);
 	}
@@ -94,5 +117,33 @@ public class TeamUIController : MonoBehaviour
         LeanTween.moveLocal(teamTurnParent.gameObject, teamTurnParentOffPosition, duration).setEaseInBack();
 
         gameController.CompleteQueueActionAfterDelay(duration);
+    }
+
+    public void ChangeUserControl()
+    {
+        Debug.Log("Changing?");
+
+        Team team;
+        if (leftSide) //HACK - should be assigned in Setup
+        {
+            team = gameController.runtimeData.playerTeam;
+        }
+        else
+        {
+            team = gameController.runtimeData.opponentTeam;
+        }
+
+        team.userControlled = !team.userControlled;
+
+        if (team.userControlled)
+        {
+            userToggleText.text = "Player";
+            userToggleImage.color = team.teamColor;
+        }
+        else
+        {
+            userToggleText.text = "Computer";
+            userToggleImage.color = defaultUserToggleImageColor;
+        }
     }
 }

@@ -18,7 +18,7 @@ public class Team
 
 	public bool userControlled = true;
 
-	private int numDicePerTurn = 3;
+	private int numDicePerTurn = 5;
 
 	private int score = 0;
 
@@ -115,7 +115,12 @@ public class Team
 					DiceSlot diceSlot = athlete.diceSlots[s];
 					if (!diceSlot.locked && diceSlot.heldDice == null && diceSlot.allowedValues.Contains(dice.value))
 					{
-						List<Tile> optionalTiles = runtimeData.GetValidTiles(athlete.currentTile, dice.value);
+						List<Tile> optionalTiles = new List<Tile>();
+
+						if (diceSlot.actionType == ActionType.Juke)
+							optionalTiles = runtimeData.GetValidDiagonals(athlete.currentTile);
+						else
+							optionalTiles = runtimeData.GetValidTiles(athlete.currentTile, dice.value);
 
 						for (int t = 0; t < optionalTiles.Count; t++)
 						{

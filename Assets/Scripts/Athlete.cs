@@ -37,7 +37,6 @@ public class Athlete
 			diceSlots.Add(new DiceSlot(diceSlot, this));
 		}
 			
-
 		//diceSlots.Add(new DiceSlot(this, MoveHorizontal, "Move Forward 1", new List<int> { 1, 2, 3 }, new List<ValueModifier> { ValueModifier.ClampedTo1 }));
 		//diceSlots.Add(new DiceSlot(this, MoveVertical, "Move Up 1" + '\n' + "on even," + '\n' + "Move Down 1" + '\n' + "on odd", new List<int> { 3, 4, 5, 6 }, new List<ValueModifier> { ValueModifier.ClampedTo1, ValueModifier.OddBecomesNegative }));
 		//diceSlots.Add(new DiceSlot(this));
@@ -52,6 +51,13 @@ public class Athlete
 				AddToMovementQueue(tile);
 		}
 
+		AddToMovementQueue(newTile);
+
+		BeginMovement();
+	}
+
+	public void DiagonalMoveToTile(Tile newTile)
+	{
 		AddToMovementQueue(newTile);
 
 		BeginMovement();
@@ -144,7 +150,7 @@ public class Athlete
 
 		movementQueue.Remove(tile);
 
-		UpdateDiceSlots();
+		//UpdateDiceSlots();
 	}
 
 	public Tile GetNearestAdjacentTile()

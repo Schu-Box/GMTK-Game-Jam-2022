@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
+[System.Serializable]
 public enum ActionType
 {
 	Move,
-	Kick
+	Kick,
+	Juke
 }
 
 [CreateAssetMenu(menuName = "Athlete Config")]

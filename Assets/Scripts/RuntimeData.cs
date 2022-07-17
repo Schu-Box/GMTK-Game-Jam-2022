@@ -19,6 +19,8 @@ public class RuntimeData
 	public int turnsPerMatch = 20;
 	public bool playerTurn = false;
 	public int turn = -1;
+	public bool matchStarted = false;
+	public bool matchEnded = false;
 
 	[HideInInspector] public GameController gameController;
 
@@ -36,10 +38,6 @@ public class RuntimeData
 
 		playerTeam.AssignAthletesToStartingPositions();
 		opponentTeam.AssignAthletesToStartingPositions();
-
-		opponentTeam.teamController.QueueDisplayTurnEnd(); //HACK to play dice audio at a proper time
-
-		StartNextTurn();
 	}
 
 	public void SetField()
@@ -132,6 +130,37 @@ public class RuntimeData
 
 		//Debug.Log("NUm tiles " + tiles.Count);
 		return tiles;
+	}
+
+	public List<Tile> GetValidDiagonals(Tile tile)
+	{
+		List<Tile> validTiles = new List<Tile>();
+
+		Vector2Int tilePosition = GetFieldIntForTile(tile);
+
+		int right = tilePosition.x + 1;
+		int left = tilePosition.x - 1;
+		int up = tilePosition.y + 1;
+		int down = tilePosition.y - 1;
+		if(right < columns)
+		{
+			if (up < rows)
+				validTiles.Add(field[right, up]);
+
+			if (down >= 0)
+				validTiles.Add(field[right, down]);
+		}
+
+		if(left >= 0)
+		{
+			if (up < rows)
+				validTiles.Add(field[left, up]);
+
+			if (down >= 0)
+				validTiles.Add(field[left, down]);
+		}
+
+		return validTiles;
 	}
 
 	public List<Tile> GetAllTilesBetween(Tile startTile, Tile endTile)
@@ -238,6 +267,8 @@ public class RuntimeData
 	{
 		Debug.Log("Match is over!");
 
+		matchEnded = true;
+
 		gameController.QueueDisplayEndMatch();
 	}
 
@@ -257,6 +288,13 @@ public class RuntimeData
 
 	public void ResolveActiveAthleteAction(Tile tile)
 	{
+		//TODO: Please fix
+		//HACK: Clears pulses cuz sometimes they keep going. Should resolve the actual issue but I have no time
+		foreach (Athlete athlete in playerTeam.athletesInPlay)
+			athlete.athleteGameObject.Highlight(false);
+		foreach (Athlete athlete in opponentTeam.athletesInPlay)
+			athlete.athleteGameObject.Highlight(false);
+
 		activeAction.Invoke(tile);
 
 		activeAthlete = null;

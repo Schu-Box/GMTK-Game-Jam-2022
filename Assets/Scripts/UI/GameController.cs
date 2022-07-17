@@ -22,6 +22,12 @@ public class GameController : MonoBehaviour
     public GameObject athleteCardGameObjectPrefab;
     public GameObject athleteGameObjectPrefab;
 
+    public TextMeshProUGUI titleText;
+    public TextMeshProUGUI titleText2;
+    public GameObject scoreboard;
+
+    public GameObject endTurnButton;
+    public TextMeshProUGUI endTurnText;
 
     public TextMeshProUGUI turnsRemainingText;
 
@@ -41,6 +47,8 @@ public class GameController : MonoBehaviour
     public AudioClip invalidDicePlacement;
     public AudioClip goalScored;
 
+    public static float animationSpeed_matchIntro = 0.2f;
+    public static float animationSpeed_startMatch = 0.3f;
     public static float animationSpeed_turnStart = 0.5f;
     public static float animationSpeed_turnEnd = 0.5f;
     public static float animationSpeed_DiceSlot = 0.2f;
@@ -54,7 +62,7 @@ public class GameController : MonoBehaviour
     public static float animationSpeed_DiceRollShow = 0.6f;
     public static float animationSpeed_DiceDestroy = 0.15f;
     public static float animationSpeed_GoalBall = 0.7f;
-    public static float animationSpeed_GoalText = 0f; //this is nothing as of now
+    public static float animationSpeed_GoalText = 0.6f; //this is nothing as of now
     public static float animationSpeed_EndMatch = 0.3f;
 
     public Color color_diceFail;
@@ -74,12 +82,14 @@ public class GameController : MonoBehaviour
 
     private IEnumerator DelayedStart()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
 
         runtimeData.Setup(this);
 
         playerTeamController.scoreboardText.color = runtimeData.playerTeam.teamColor;
         opponentTeamController.scoreboardText.color = runtimeData.opponentTeam.teamColor;
+
+        playerTeamController.ChangeUserControl(); //Default player to player
     }
 
     public void SetFieldObjects()
@@ -112,45 +122,116 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void UserTriggerNextTurn()
+    public void UserStartMatch()
+	{
+        Debug.Log("Starting");
+
+        runtimeData.matchStarted = true;
+
+        AddToAnimationQueue(() => DisplayMatchIntroCleanup(animationSpeed_matchIntro));
+        AddToAnimationQueue(() => DisplayStartMatch(animationSpeed_startMatch));
+
+		opponentTeamController.QueueDisplayTurnEnd(); //HACK to play dice audio at a proper time
+		runtimeData.StartNextTurn();
+	}
+
+    private void DisplayMatchIntroCleanup(float duration)
+	{
+        LeanTween.value(titleText.gameObject, SetValueCallback, Color.white, Color.clear, duration).setEaseInCubic();
+        //Shouldn't need repeat
+        LeanTween.scale(playerTeamController.userToggleObject, Vector3.zero, duration).setEaseOutCubic();
+        LeanTween.scale(opponentTeamController.userToggleObject, Vector3.zero, duration).setEaseOutCubic();
+
+        CompleteQueueActionAfterDelay(duration);
+    }
+
+    public void SetValueCallback(Color value)
+	{
+        titleText.color = value;
+        titleText2.color = value;
+	}
+
+    private void DisplayStartMatch(float duration)
+	{
+        LeanTween.scale(scoreboard, Vector3.one, animationSpeed_startMatch).setEaseOutCubic();
+        LeanTween.scale(playerTeamController.scoreBoard, Vector3.one, animationSpeed_startMatch).setEaseOutCubic();
+        LeanTween.scale(opponentTeamController.scoreBoard, Vector3.one, animationSpeed_startMatch).setEaseOutCubic();
+        LeanTween.scale(turnsRemainingText.transform.parent.gameObject, Vector3.one, animationSpeed_startMatch).setEaseOutCubic();
+
+        CompleteQueueActionAfterDelay(duration);
+	}
+
+    public void UserPressedEndTurnButton()
     {
         ClearInteractableTiles();
 
-        runtimeData.EndTurn();
-
-        if (runtimeData.playerTurn)
-        {
-            AwaitNextMove();
-        }
-		else
+		if (!runtimeData.matchStarted)
 		{
-            AwaitNextMove();
+            UserStartMatch();
 		}
+        else if (runtimeData.matchEnded)
+		{
+            SceneManager.LoadScene(0);
+		}
+        else
+        {
+            runtimeData.EndTurn();
+
+            if (runtimeData.playerTurn)
+            {
+                AwaitNextMove();
+            }
+            else
+            {
+                AwaitNextMove();
+            }
+        }
     }
+
+    public void ActivateEndTurnButton(bool activate)
+	{
+        if (activate)
+            LeanTween.scale(endTurnButton, Vector3.one, 0.2f);
+        else
+            LeanTween.scale(endTurnButton, Vector3.zero, 0.2f);
+	}
 
     public void AwaitNextMove()
     {
-		if (runtimeData.GetActiveTeam().userControlled)
-        {
-            userInteractionAllowed = true;
-
-            //Wait for the user to make a move
-        }
-        else
+        if(!runtimeData.matchStarted)
 		{
-            userInteractionAllowed = false;
-
-            ComputerAction computerAction = runtimeData.GetActiveTeam().DetermineNextMove();
-            if(computerAction != null)
-            {
-                runtimeData.PlayDiceInDiceSlot(computerAction.dice, computerAction.diceSlot);
-                runtimeData.ResolveActiveAthleteAction(computerAction.selectedTile);
-            }
-			else
-			{
-                runtimeData.EndTurn();
-			}
+            ActivateEndTurnButton(true);
 		}
+        else if (!runtimeData.matchEnded) //May be unneccsary now
+        {
+            foreach (Athlete athlete in runtimeData.GetActiveTeam().athletesInPlay)
+                athlete.UpdateDiceSlots();
+
+            if (runtimeData.GetActiveTeam().userControlled)
+            {
+                userInteractionAllowed = true;
+
+                ActivateEndTurnButton(true);
+                endTurnText.text = "End Turn";
+            }
+            else
+            {
+                userInteractionAllowed = false;
+
+                ActivateEndTurnButton(false);
+
+                ComputerAction computerAction = runtimeData.GetActiveTeam().DetermineNextMove();
+                if (computerAction != null)
+                {
+                    runtimeData.PlayDiceInDiceSlot(computerAction.dice, computerAction.diceSlot);
+                    runtimeData.ResolveActiveAthleteAction(computerAction.selectedTile);
+                }
+                else
+                {
+                    runtimeData.EndTurn();
+                }
+            }
+        }
     }
 
     public void ClearInteractableTiles()
@@ -182,9 +263,14 @@ public class GameController : MonoBehaviour
         Athlete athlete = slotObject.diceSlot.athlete;
 
 		ClearInteractableTiles();
-		List<Tile> optionalTiles = runtimeData.GetValidTiles(athlete.currentTile, diceObject.dice.value);
+        List<Tile> optionalTiles = new List<Tile>();
 
-		if (slotObject.diceSlot.athlete.team.userControlled)
+        if (slotObject.diceSlot.actionType == ActionType.Juke)
+            optionalTiles = runtimeData.GetValidDiagonals(athlete.currentTile);
+        else
+            optionalTiles = runtimeData.GetValidTiles(athlete.currentTile, diceObject.dice.value);
+
+        if (slotObject.diceSlot.athlete.team.userControlled)
 		{
 			foreach (Tile tile in optionalTiles)
                 tile.tileGameObject.Highlight(true);
@@ -305,6 +391,9 @@ public class GameController : MonoBehaviour
     }
     private void DisplayEndMatch(float duration)
 	{
+        ActivateEndTurnButton(true);
+        endTurnText.text = "Rematch";
+
         turnsRemainingText.text = "Game Over";
 
         LeanTween.scale(turnsRemainingText.gameObject, Vector3.one, duration).setEaseOutElastic();

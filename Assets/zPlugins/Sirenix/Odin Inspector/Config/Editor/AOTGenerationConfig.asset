@@ -12,9 +12,42 @@ MonoBehaviour:
   m_Script: {fileID: 1726182683, guid: a4865f1ab4504ed8a368670db22f409c, type: 3}
   m_Name: AOTGenerationConfig
   m_EditorClassIdentifier: 
-  automateBeforeBuilds: 0
+  automateBeforeBuilds: 1
   deleteDllAfterBuilds: 1
   AutomateForAllAOTPlatforms: 1
   automateForPlatforms: 0900000014000000
-  lastScan: 0
-  supportSerializedTypes: []
+  lastScan: 637936662594167695
+  supportSerializedTypes:
+  - TypeName: ActionType, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: Athlete, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: Athlete+Action, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Boolean, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: Dice, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: DiceSlot, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: DiceSlotObject, Assembly-CSharp
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Int32, mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[DiceSlot, Assembly-CSharp]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib
+    IsCustom: 0
+    Emit: 1
+  - TypeName: System.String, mscorlib
+    IsCustom: 0
+    Emit: 1
