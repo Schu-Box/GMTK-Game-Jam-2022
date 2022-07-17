@@ -26,7 +26,7 @@ public class Athlete
 		team = assignedTeam;
 
 		diceSlots.Add(new DiceSlot(this, MoveToTile, "Move", new List<int> { 1, 2, 3, 4, 5, 6 }));
-		diceSlots.Add(new DiceSlot(this, KickToTile, "Kick", new List<int> { 1, 2, 3, 4, 5, 6 }));
+		diceSlots.Add(new DiceSlot(this, KickToTile, "Kick", new List<int> { 1, 2, 3, 4, 5, 6 }, true));
 		//diceSlots.Add(new DiceSlot(this, MoveHorizontal, "Move Forward 1", new List<int> { 1, 2, 3 }, new List<ValueModifier> { ValueModifier.ClampedTo1 }));
 		//diceSlots.Add(new DiceSlot(this, MoveVertical, "Move Up 1" + '\n' + "on even," + '\n' + "Move Down 1" + '\n' + "on odd", new List<int> { 3, 4, 5, 6 }, new List<ValueModifier> { ValueModifier.ClampedTo1, ValueModifier.OddBecomesNegative }));
 		//diceSlots.Add(new DiceSlot(this));
@@ -43,12 +43,15 @@ public class Athlete
 
 		AddToMovementQueue(newTile);
 
-		AttemptMovement();
+		BeginMovement();
 	}
 
 	public void KickToTile(Tile newTile)
 	{
 		Ball kickedBall = heldBall;
+
+		//kickedBall.currentTile_NoPossession = currentTile; //Hacky solution be we jamming
+		kickedBall.AssignPossessor(null);
 
 		List<Tile> allTilesBetween = team.runtimeData.GetAllTilesBetween(currentTile, newTile);
 
@@ -57,7 +60,7 @@ public class Athlete
 
 		kickedBall.AddToMovementQueue(newTile);
 
-		kickedBall.AttemptMovement();
+		kickedBall.BeginMovement();
 	}
 
 	public void AddToMovementQueue(Tile tile)
@@ -70,7 +73,7 @@ public class Athlete
 		movementQueue = new List<Tile>();
 	}
 
-	public void AttemptMovement()
+	public void BeginMovement()
 	{
 		while(movementQueue.Count > 0)
 		{
@@ -80,13 +83,13 @@ public class Athlete
 
 	public void AttemptToEnterTile(Tile tile)
 	{
-		if(tile.occupier != null)
+		if(tile.GetOccupier() != null)
 		{
 			//roll dice
-			Athlete defender = tile.occupier;
+			Athlete defender = tile.GetOccupier();
 
-			Dice intruderRoll = new Dice();
-			Dice defenderRoll = new Dice();
+			Dice intruderRoll = new Dice(team);
+			Dice defenderRoll = new Dice(defender.team);
 
 			Debug.Log("Roll " + intruderRoll.value + " vs " + defenderRoll.value);
 			athleteGameObject.QueueDisplayRoll(intruderRoll);
@@ -133,28 +136,28 @@ public class Athlete
 		if (currentVector2.y - 1 >= 0)
 		{
 			Tile downTile = team.runtimeData.field[currentVector2.x, currentVector2.y - 1];
-			if (downTile.occupier == null)
+			if (downTile.GetOccupier() == null)
 				return downTile;
 		}
 		
 		if(currentVector2.y + 1 < team.runtimeData.rows)
 		{
 			Tile upTile = team.runtimeData.field[currentVector2.x, currentVector2.y + 1];
-			if (upTile.occupier == null)
+			if (upTile.GetOccupier() == null)
 				return upTile;
 		}
 
 		if (currentVector2.x - 1 >= 0)
 		{
 			Tile leftTile = team.runtimeData.field[currentVector2.x - 1, currentVector2.y];
-			if (leftTile.occupier == null)
+			if (leftTile.GetOccupier() == null)
 				return leftTile;
 		}
 
 		if (currentVector2.x + 1 < team.runtimeData.columns)
 		{
 			Tile rightTile = team.runtimeData.field[currentVector2.x + 1, currentVector2.y];
-			if (rightTile.occupier == null)
+			if (rightTile.GetOccupier() == null)
 				return rightTile;
 		}
 
@@ -198,6 +201,20 @@ public class Athlete
 	{
 		heldBall = newBall;
 
-		newBall.AssignToAthlete(this);
+		newBall.AssignPossessor(this);
+	}
+
+	public void UpdateDiceSlots()
+	{
+		foreach(DiceSlot diceSlot in diceSlots)
+		{
+			diceSlot.Activate(true);
+
+			if (diceSlot.ballRequired && heldBall == null)
+				diceSlot.Activate(false);
+
+			if (diceSlot.noBallRequired && heldBall != null)
+				diceSlot.Activate(false);
+		}
 	}
 }

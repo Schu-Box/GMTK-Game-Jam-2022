@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class TeamUIController : MonoBehaviour
 {
@@ -8,6 +10,8 @@ public class TeamUIController : MonoBehaviour
     public Transform athleteCardGameObjectParent;
 
     public Transform diceGameObjectParent;
+
+    public TextMeshProUGUI scoreboardText;
 
     private GameController gameController;
 
@@ -31,10 +35,23 @@ public class TeamUIController : MonoBehaviour
             newAthleteObject.FlipImage();
     }
 
-     public void GenerateDiceGameObject(Dice dice)
+    public void GenerateDiceGameObject(Dice dice)
 	{
         DiceObject newDiceObject = Instantiate(gameController.diceGameObjectPrefab, diceGameObjectParent).GetComponent<DiceObject>();
         newDiceObject.Setup(dice);
-        //dice.diceObject = newDiceObject;
+		dice.diceGameObject = newDiceObject;
+	}
+
+    public void QueueDisplayScore(int newScore)
+	{
+        gameController.AddToAnimationQueue(() => DisplayScore(newScore, GameController.animationSpeed_GoalText));
+	}
+    private void DisplayScore(int newScore, float duration)
+	{
+        scoreboardText.text = newScore.ToString();
+
+        //TODO: Animate
+
+        gameController.CompleteQueueActionAfterDelay(duration);
 	}
 }

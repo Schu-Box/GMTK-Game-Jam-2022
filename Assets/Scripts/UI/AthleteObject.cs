@@ -27,7 +27,7 @@ public class AthleteObject : MonoBehaviour
 
 	public void DisplayMovement(TileObject tileObject, float speed)
 	{
-		LeanTween.move(gameObject, tileObject.transform.position, speed);
+		LeanTween.move(gameObject, tileObject.transform.position, speed).setEaseOutCubic();
 
 		gameController.CompleteQueueActionAfterDelay(speed);
 	}
@@ -45,8 +45,6 @@ public class AthleteObject : MonoBehaviour
 		newDiceObject.transform.localPosition = Vector3.zero;
 
 		LeanTween.scale(newDiceObject.gameObject, Vector3.one, durationGrow);
-
-		
 
 		gameController.CompleteQueueActionAfterDelay(durationGrow + durationShow);
 	}

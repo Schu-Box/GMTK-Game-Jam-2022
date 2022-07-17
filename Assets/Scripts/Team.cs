@@ -17,6 +17,8 @@ public class Team
 
 	private int numDicePerTurn = 3;
 
+	private int score = 0;
+
 	public void Setup(RuntimeData data, TeamUIController teamUIController)
 	{
 		runtimeData = data;
@@ -43,9 +45,17 @@ public class Team
 		}
 	}
 
-	public void PerformTurn()
+	public void StartTurn()
 	{
 		RollDice();
+
+		foreach(Athlete athlete in athletesInPlay)
+		{
+			foreach(DiceSlot diceSlot in athlete.diceSlots)
+			{
+				diceSlot.ClearDice();
+			}
+		}
 
 		//foreach (Athlete athlete in athletesInPlay)
 		//	athlete.PerformAction();
@@ -57,7 +67,7 @@ public class Team
 
 		for(int i= 0; i < numDicePerTurn; i++)
 		{
-			Dice newDice = new Dice();
+			Dice newDice = new Dice(this);
 			diceRolled.Add(newDice);
 
 			teamController.GenerateDiceGameObject(newDice);
@@ -73,6 +83,11 @@ public class Team
 	public void ScoreGoal(Athlete scorer, Ball ball)
 	{
 		Debug.Log("GOAL by " + scorer.name);
+		score++;
+
+		teamController.QueueDisplayScore(score);
+
+		ball.ballGameObject.QueueDisplayScored();
 
 		ball.ResetBall();
 	}

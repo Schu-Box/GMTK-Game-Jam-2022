@@ -2,36 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ValueModifier
-{
-	ClampedTo1,
-	OddBecomesNegative
-}
-
 public class DiceSlot
 {
 	public Athlete athlete;
-
-	public List<int> allowedValues = new List<int>();
-	public List<ValueModifier> valueModifiers = new List<ValueModifier>();
-
+	public Athlete.Action action;
 	public string description;
 
-	public Athlete.Action action;
+	public List<int> allowedValues = new List<int>();
 
-	public DiceSlot(Athlete newAthlete, Athlete.Action newAction, string newDescription, List<int> newAllowedValues)
+	public bool ballRequired;
+	public bool noBallRequired;
+
+	public bool active = true;
+	public Dice heldDice = null;
+
+	public DiceSlotObject gameObject; //I kinda like this but could be confusing?
+
+	public DiceSlot(Athlete newAthlete, Athlete.Action newAction, string newDescription, List<int> newAllowedValues, bool ballReq = false, bool noBallReq = false)
 	{
 		athlete = newAthlete;
+		action = newAction;
+		description = newDescription;
 
 		for (int i = 0; i < newAllowedValues.Count; i++)
 			allowedValues.Add(newAllowedValues[i]);
 
-		//for (int i = 0; i < newValueModifiers.Count; i++)
-		//	valueModifiers.Add(newValueModifiers[i]);
+		ballRequired = ballReq;
+		noBallRequired = noBallReq;
+	}
 
-		description = newDescription;
+	public void Activate(bool activate)
+	{
+		active = activate;
 
-		action = newAction;
+		gameObject.Activate(active);
+	}
+
+	public void FillWithDice(Dice dice)
+	{
+		heldDice = dice;
+	}
+
+	public void ClearDice()
+	{
+		if(heldDice != null)
+		{
+			heldDice.diceGameObject.DisplayCleared();
+			heldDice = null;
+		}
 	}
 
 	//public void TriggerWithValue(int value)

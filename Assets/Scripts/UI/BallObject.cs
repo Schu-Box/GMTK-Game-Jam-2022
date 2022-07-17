@@ -5,18 +5,20 @@ using UnityEngine.UI;
 
 public class BallObject : MonoBehaviour
 {
+	public Ball ball;
 	public Image ballImage;
 
 	private GameController gameController;
 
-	private void Awake()
+	public void Setup(Ball newBall)
 	{
 		gameController = FindObjectOfType<GameController>();
+		ball = newBall;
 	}
 
 	public void QueueDisplayMovement(Tile tile)
 	{
-		gameController.AddToAnimationQueue(() => DisplayMovement(tile, GameController.animationSpeed_Move));
+		gameController.AddToAnimationQueue(() => DisplayMovement(tile, GameController.animationSpeed_BallMove));
 	}
 	private void DisplayMovement(Tile tile, float speed)
 	{
@@ -31,11 +33,23 @@ public class BallObject : MonoBehaviour
 	}
 	private void DisplayPossession(Athlete athlete, float duration)
 	{
-		transform.SetParent(athlete.athleteGameObject.displayBallHolder);
-		LeanTween.moveLocal(gameObject, Vector3.zero, duration);
-		LeanTween.value(gameObject, UpdateColor, ballImage.color, athlete.team.teamColor, duration);
+		Vector3 newPosition;
+		if (athlete != null)
+		{
+			newPosition = athlete.athleteGameObject.displayBallHolder.position;
+			transform.SetParent(athlete.athleteGameObject.displayBallHolder);
 
-		gameController.CompleteQueueActionAfterDelay(0f);
+			LeanTween.move(gameObject, newPosition, duration).setEaseOutElastic();
+			//LeanTween.value(gameObject, UpdateColor, ballImage.color, athlete.team.teamColor, duration);
+		}
+		else
+		{
+			//newPosition = ball.currentTile_NoPossession.tileGameObject.transform.position;
+			transform.SetParent(gameController.ballGameObjectParent);
+		}
+		
+
+		gameController.CompleteQueueActionAfterDelay(duration);
 	}
 
 	private void UpdateColor(Color value)
@@ -55,7 +69,18 @@ public class BallObject : MonoBehaviour
 		transform.position = spawnPosition;
 		transform.localScale = Vector3.zero;
 
-		LeanTween.scale(gameObject, Vector3.one, duration);
+		LeanTween.scale(gameObject, Vector3.one, duration).setEaseInCubic();
+
+		gameController.CompleteQueueActionAfterDelay(duration);
+	}
+
+	public void QueueDisplayScored()
+	{
+		gameController.AddToAnimationQueue(() => DisplayScored(GameController.animationSpeed_GoalBall));
+	}
+	private void DisplayScored(float duration)
+	{
+		LeanTween.scale(gameObject, Vector3.zero, duration).setEaseInBack();
 
 		gameController.CompleteQueueActionAfterDelay(duration);
 	}

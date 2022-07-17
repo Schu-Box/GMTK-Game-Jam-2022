@@ -30,7 +30,14 @@ public class TileObject : MonoBehaviour, IPointerClickHandler
 			fillImage.sprite = gameController.goalImage;
 
 		if (tile.owner != null)
+		{
 			fillImage.color = tile.owner.teamColor;
+
+			//if (tile.owner == gameController.runtimeData.playerTeam)
+			//	transform.localEulerAngles = new Vector3(0, 0, 90);
+			//else
+			//	transform.localEulerAngles = new Vector3(0, 0, 270);
+		}
 		else
 			fillImage.color = Color.gray;
 	}
@@ -55,8 +62,6 @@ public class TileObject : MonoBehaviour, IPointerClickHandler
 	{
 		if(clickable)
 		{
-			Debug.Log("CLICKED");
-
 			gameController.UserClickedTile(tile);
 		}
 	}

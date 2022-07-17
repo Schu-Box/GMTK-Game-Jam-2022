@@ -15,8 +15,8 @@ public class Tile
 
 	public TileObject tileGameObject;
 
-	public Athlete occupier = null;
-	public Ball ballLooseInTile = null;
+	private Athlete occupier = null;
+	private Ball ballLooseInTile = null;
 
 	public void SetAsGoal()
 	{
@@ -28,19 +28,22 @@ public class Tile
 		owner = team;
 	}
 
-	public void AssignLooseBall(Ball looseBall)
-	{
-		ballLooseInTile = looseBall;
-	}
-
 	public void AthleteEntered(Athlete athlete)
 	{
 		occupier = athlete;
 
-		if(ballLooseInTile != null && occupier.heldBall == null)
+		if(ballLooseInTile != null)
 		{
-			occupier.PossessBall(ballLooseInTile);
-			ballLooseInTile = null;
+			if(occupier.heldBall == null)
+			{
+				occupier.PossessBall(ballLooseInTile);
+				ballLooseInTile = null;
+			}
+			else //Athlete is already holding a ball, therefore it should be deflected
+			{
+				Debug.Log("ERROR: Athlete entered tile holding ball while ball is loose in Tile");
+				ballLooseInTile.Deflection(this);
+			}
 		}
 
 		if(tileType == TileType.Goal)
@@ -49,7 +52,7 @@ public class Tile
 
 			if(athlete.heldBall != null)
 			{
-				athlete.team.ScoreGoal(athlete, athlete.heldBall);
+				athlete.team.runtimeData.GetOppositeTeam(owner).ScoreGoal(athlete, athlete.heldBall);
 			}
 		}
 	}
@@ -57,5 +60,30 @@ public class Tile
 	public void AthleteExited(Athlete athlete)
 	{
 		occupier = null;
+	}
+
+	public void LooseBallEntered(Ball ball)
+	{
+		ballLooseInTile = ball;
+
+		if (tileType == TileType.Goal)
+		{
+			owner.runtimeData.GetOppositeTeam(owner).ScoreGoal(owner.runtimeData.activeAthlete, ball);
+		}
+	}
+
+	public void LooseBallExited(Ball ball)
+	{
+		ballLooseInTile = null;
+	}
+
+	public Athlete GetOccupier()
+	{
+		return occupier;
+	}
+
+	public Ball GetLooseBall()
+	{
+		return ballLooseInTile;
 	}
 }

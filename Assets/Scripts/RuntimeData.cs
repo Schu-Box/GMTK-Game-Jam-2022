@@ -16,6 +16,9 @@ public class RuntimeData
 	public int columns = 8;
 	//public List<Athlete> athletesInPlay = new List<Athlete>();
 
+	public bool playerTurn = false;
+	public int turn = 0;
+
 	[HideInInspector] public GameController gameController;
 
 	public void Setup(GameController gc)
@@ -32,6 +35,8 @@ public class RuntimeData
 
 		playerTeam.AssignAthletesToStartingPositions();
 		opponentTeam.AssignAthletesToStartingPositions();
+
+		NextTurn();
 	}
 
 	public void SetField()
@@ -81,7 +86,7 @@ public class RuntimeData
 		return new Vector2Int(0, 0);
 	}
 
-	public List<Tile> GetAdjacentTiles(Tile tile, int range, bool blockedByAthletes)
+	public List<Tile> GetAdjacentTiles(Tile tile, int range, bool blockedByAthletes = false)
 	{
 		List<Tile> tiles = new List<Tile>();
 
@@ -122,7 +127,7 @@ public class RuntimeData
 			}
 		}
 
-		Debug.Log("NUm tiles " + tiles.Count);
+		//Debug.Log("NUm tiles " + tiles.Count);
 		return tiles;
 	}
 
@@ -176,13 +181,13 @@ public class RuntimeData
 			Debug.Log("Error - start and end tiles have no matching row/column");
 		}
 
-		Debug.Log("Tiles between count " + tilesBetween.Count);
+		//Debug.Log("Tiles between count " + tilesBetween.Count);
 		return tilesBetween;
 	}
 
 	public bool CheckForAthleteInTile(Tile tile)
 	{
-		if (tile.occupier != null)
+		if (tile.GetOccupier() != null)
 			return true;
 		else
 			return false;
@@ -198,33 +203,35 @@ public class RuntimeData
 		}
 	}
 
-	private bool playerTurn = true;
-	private int turn = 0;
     public void NextTurn()
 	{
-		//foreach (Athlete athlete in athletesInPlay)
-		//	athlete.PerformAction();
-
-		if(playerTurn)
-			playerTeam.PerformTurn();
-		else
-			opponentTeam.PerformTurn();
-
-		turn++;
 		playerTurn = !playerTurn;
+		turn++;
+
+		if (playerTurn)
+			playerTeam.StartTurn();
+		else
+			opponentTeam.StartTurn();
 	}
 
-	private Athlete activeAthlete = null;
+	public Athlete activeAthlete = null;
 	private Athlete.Action activeAction = null;
-	public void ActivateAthlete(Athlete athlete, Athlete.Action action)
+	public void PlayDiceInDiceSlot(Dice dice, DiceSlot slot)
 	{
-		activeAthlete = athlete;
-		activeAction = action;
+		slot.FillWithDice(dice);
+
+		activeAthlete = slot.athlete;
+		activeAction = slot.action;
+
+		activeAthlete.team.diceRolled.Remove(dice);
 	}
 
 	public void ResolveActiveAthleteAction(Tile tile)
 	{
 		activeAction.Invoke(tile);
+
+		if (playerTurn)
+			gameController.AwaitUserEndTurn();
 	}
 
 	public void TackleAthlete(Athlete tackler, Athlete tacklee)
@@ -235,5 +242,13 @@ public class RuntimeData
 		}
 
 		tacklee.MoveToTile(tacklee.GetNearestAdjacentTile());
+	}
+
+	public Team GetOppositeTeam(Team team)
+	{
+		if (team == playerTeam)
+			return opponentTeam;
+		else
+			return playerTeam;
 	}
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ball
 {
-	public Tile looseInTile;
+	public Tile currentTile_NoPossession;
 	public Athlete currentPossessor;
 
 	public BallObject ballGameObject;
@@ -23,7 +23,7 @@ public class Ball
 	{
 		spawn = initialSpawn;
 
-		AssignToTile(runtimeData.field[spawn.x, spawn.y]);
+		AttemptToEnterTile(runtimeData.field[spawn.x, spawn.y]);
 	}
 
 	public void AddToMovementQueue(Tile tile)
@@ -36,49 +36,99 @@ public class Ball
 		movementQueue = new List<Tile>();
 	}
 
-	public void AttemptMovement()
+	public void BeginMovement()
 	{
 		while (movementQueue.Count > 0)
 		{
-			AssignToTile(movementQueue[0]);
+			AttemptToEnterTile(movementQueue[0]);
 		}
 	}
 
-	public void AssignToTile(Tile tile)
+	public void AttemptToEnterTile(Tile tile)
 	{
-		if (looseInTile != null)
-			looseInTile.ballLooseInTile = null;
-
-		if (tile.occupier != null)
+		if (tile.GetOccupier() == null) 
 		{
-			tile.occupier.PossessBall(this);
+			if(tile.GetLooseBall() == null) //Tile is completely empty, ball may enter freely
+			{
+				CompleteMovement(tile);
+			}
+			else //Already a loose ball in tile, deflection occurs
+			{
+				Debug.Log("Thinks there's a loose ball");
+
+				Deflection(tile);
+			}
 		}
 		else
 		{
-			looseInTile = tile;
-			tile.AssignLooseBall(this);
+			if(tile.GetOccupier().heldBall == null)
+			{
+				CompleteMovement(tile);
+				AbortMovementQueue();
+			}
+			else //Athlete already holds ball so it deflects
+			{
+				Debug.Log("Thinks athlete holds?");
+
+				Deflection(tile);
+			}
+		}
+	}
+
+	public void CompleteMovement(Tile tile)
+	{
+		if (currentTile_NoPossession != null)
+		{
+			currentTile_NoPossession.LooseBallExited(this);
+			currentTile_NoPossession = null;
 		}
 
 		ballGameObject.QueueDisplayMovement(tile);
+
+		if (tile.GetOccupier() != null)
+		{
+			tile.GetOccupier().PossessBall(this);
+		}
+		else
+		{
+			currentTile_NoPossession = tile;
+			tile.LooseBallEntered(this);
+		}
+
+		movementQueue.Remove(tile);
 	}
 
-	public void AssignToAthlete(Athlete athlete) //Must always go through Athlete.PossessBall
+	public void Deflection(Tile tileDeflectedFrom)
 	{
-		Debug.Log("Assigned to athlete");
+		Debug.Log("TODO: Deflection");
 
-		looseInTile = null;
+		AbortMovementQueue();
 
-		currentPossessor = athlete;
+		//AddToMovementQueue(runtimeData.GetAdjacentTiles(tileDeflectedFrom), 1, false);
+		
+	}
 
-		ballGameObject.QueueDisplayPossession(athlete);
+	public void AssignPossessor(Athlete newPossessor)
+	{
+		if (currentPossessor != null)
+			currentPossessor.heldBall = null;
+
+		if(newPossessor != null)
+		{
+			currentTile_NoPossession = null;
+
+			currentPossessor = newPossessor;
+		}
+
+		ballGameObject.QueueDisplayPossession(newPossessor);
 	}
 
 	public void ResetBall()
 	{
-		if(looseInTile != null)
+		if(currentTile_NoPossession != null)
 		{
-			looseInTile.ballLooseInTile = null;
-			looseInTile = null;
+			currentTile_NoPossession.LooseBallExited(null);
+			currentTile_NoPossession = null;
 		}
 
 		if(currentPossessor != null)
@@ -91,6 +141,6 @@ public class Ball
 
 		ballGameObject.QueueDisplayReset(spawnTile.tileGameObject.transform.position);
 
-		AssignToTile(spawnTile);
+		AttemptToEnterTile(spawnTile);
 	}
 }

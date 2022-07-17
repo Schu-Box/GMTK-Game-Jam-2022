@@ -19,7 +19,7 @@ public class AthleteCardObject : MonoBehaviour
         athleteTitle.text = athlete.name;
         //athleteImage.sprite = athlete.sprite;
 
-        for(int i = 0; i < diceSlotObjects.Count; i++)
+        for(int i = diceSlotObjects.Count - 1; i >= 0; i--)
 		{
             if(i < athlete.diceSlots.Count)
             {

@@ -53,15 +53,19 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     }
 
     public void SetNewParent(Transform newParent)
-	{
-        parentToReturnTo = newParent;
+    {
         transform.SetParent(newParent);
-	}
+        parentToReturnTo = newParent;
+        positionToReturnTo = newParent.transform.position;
+
+    }
 
     public void ReturnToParent()
     {
         transform.SetParent(parentToReturnTo);
-        transform.position = positionToReturnTo;
+        //transform.position = positionToReturnTo;
+
+        LeanTween.move(gameObject, positionToReturnTo, GameController.animationSpeed_DiceSlot).setEaseInCubic();
     }
 
     private bool GetDraggability()

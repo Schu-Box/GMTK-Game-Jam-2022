@@ -12,6 +12,15 @@ public class DiceSlotObject : MonoBehaviour, IDropHandler
 	public List<GameObject> diceImages;
 	public TextMeshProUGUI descriptionText;
 
+	public Transform diceHolder;
+
+	private GameController gameController;
+
+	private void Awake()
+	{
+		gameController = FindObjectOfType<GameController>();
+	}
+
 	public void Setup(DiceSlot newDiceSlot)
 	{
 		diceSlot = newDiceSlot;
@@ -23,6 +32,13 @@ public class DiceSlotObject : MonoBehaviour, IDropHandler
 			diceImages[diceSlot.allowedValues[i] - 1].SetActive(true);
 
 		descriptionText.text = diceSlot.description;
+
+		diceSlot.gameObject = this;
+	}
+
+	public void Activate(bool active)
+	{
+		gameObject.SetActive(active);
 	}
 
 	public void OnDrop(PointerEventData pointerEventData)
@@ -37,16 +53,15 @@ public class DiceSlotObject : MonoBehaviour, IDropHandler
 	public void AttemptToDropDice(DiceObject diceObject)
 	{
 		int value = diceObject.dice.value;
-		Debug.Log("Dropped a " + value + " on DropZone ");
+		//Debug.Log("Dropped a " + value + " on DropZone ");
 
-		if (diceSlot.allowedValues.Contains(value))
+		if (diceSlot.allowedValues.Contains(value) && diceSlot.athlete.team == diceObject.dice.owner && diceSlot.heldDice == null)
 		{
 			//diceSlot.TriggerWithValue(value);
 
-			Destroy(diceObject.gameObject);
+			diceObject.draggable.SetNewParent(diceHolder);
 
-			diceSlot.athlete.team.runtimeData.ActivateAthlete(diceSlot.athlete, diceSlot.action);
-			FindObjectOfType<GameController>().AwaitUserTileSelection(diceSlot.athlete.currentTile, value, false);
+			gameController.UserPlacedDiceInSlot(diceObject, this);
 		}
 	}
 }
