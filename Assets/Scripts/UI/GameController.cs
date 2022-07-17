@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameController : MonoBehaviour
 {
@@ -20,8 +23,12 @@ public class GameController : MonoBehaviour
     public GameObject athleteGameObjectPrefab;
 
 
+    public TextMeshProUGUI turnsRemainingText;
+
     public List<Sprite> diceFaceSprites;
 
+    public static float animationSpeed_turnStart = 0.5f;
+    public static float animationSpeed_turnEnd = 0.5f;
     public static float animationSpeed_DiceSlot = 0.2f;
     public static float animationSpeed_DiceFail = 0.3f;
     public static float animationSpeed_DiceClear = 0.3f;
@@ -34,6 +41,7 @@ public class GameController : MonoBehaviour
     public static float animationSpeed_DiceDestroy = 0.15f;
     public static float animationSpeed_GoalBall = 0.7f;
     public static float animationSpeed_GoalText = 0f; //this is nothing as of now
+    public static float animationSpeed_EndMatch = 0.3f;
 
     public Color color_diceFail;
 
@@ -88,16 +96,22 @@ public class GameController : MonoBehaviour
 
     public void UserTriggerNextTurn()
     {
-        runtimeData.NextTurn();
+        runtimeData.EndTurn();
 
         if (runtimeData.playerTurn)
         {
             AllowUserInteraction(true);
         }
+		else
+		{
+            AllowUserInteraction(false);
+		}
     }
 
     public void AllowUserInteraction(bool allowed)
     {
+        ClearInteractableTiles();
+
         userInteractionAllowed = allowed;
 
         if (userInteractionAllowed)
@@ -110,16 +124,21 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void ClearInteractableTiles()
+	{
+        foreach (Tile tile in runtimeData.field)
+        {
+            tile.tileGameObject.Highlight(false);
+        }
+    }
+
     public void UserPlacedDiceInSlot(DiceObject diceObject, DiceSlotObject slotObject)
     {
         runtimeData.PlayDiceInDiceSlot(diceObject.dice, slotObject.diceSlot);
 
         Athlete athlete = slotObject.diceSlot.athlete;
 
-        foreach (Tile tile in runtimeData.field)
-        {
-            tile.tileGameObject.Highlight(false);
-        }
+        ClearInteractableTiles();
 
         List<Tile> optionalTiles = runtimeData.GetAdjacentTiles(athlete.currentTile, diceObject.dice.value);
 
@@ -145,10 +164,7 @@ public class GameController : MonoBehaviour
 
     public void UserClickedTile(Tile clickedTile)
 	{
-        foreach(Tile tile in runtimeData.field)
-		{
-            tile.tileGameObject.Highlight(false);
-		}
+        ClearInteractableTiles();
 
         runtimeData.ResolveActiveAthleteAction(clickedTile);
 	}
@@ -160,7 +176,7 @@ public class GameController : MonoBehaviour
         if(runtimeData.playerTeam.diceRolled.Count == 0)
 		{
             //Debug.Log("User ran out of dice, end turn");
-            runtimeData.NextTurn();
+            runtimeData.EndTurn();
 		}            
 	}
 
@@ -183,6 +199,11 @@ public class GameController : MonoBehaviour
 
             StartAction(actionQueue[0]);
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+		{
+            SceneManager.LoadScene(0);
+		}
     }
 
     public void StartAction(UnityAction action)
@@ -205,5 +226,29 @@ public class GameController : MonoBehaviour
 		{
             AllowUserInteraction(true);
 		}
+    }
+
+    public void DisplayEndTurn(float duration)
+	{
+        LeanTween.scale(turnsRemainingText.gameObject, Vector3.zero, duration).setEaseInExpo();
+	}
+
+    public void DisplayStartTurn(float duration)
+	{
+        turnsRemainingText.text = "Turns Remaining: " + (runtimeData.turnsPerMatch - runtimeData.turn + 1);
+        LeanTween.scale(turnsRemainingText.gameObject, Vector3.one, duration).setEaseOutExpo();
+    }
+
+    public void QueueDisplayEndMatch()
+	{
+        AddToAnimationQueue(() => DisplayEndMatch(animationSpeed_EndMatch));
+    }
+    private void DisplayEndMatch(float duration)
+	{
+        turnsRemainingText.text = "Game Over";
+
+        LeanTween.scale(turnsRemainingText.gameObject, Vector3.one, duration).setEaseOutElastic();
+
+        CompleteQueueActionAfterDelay(duration);
     }
 }

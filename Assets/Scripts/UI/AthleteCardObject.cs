@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
-public class AthleteCardObject : MonoBehaviour
+public class AthleteCardObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private Athlete athlete;
 
@@ -32,4 +33,26 @@ public class AthleteCardObject : MonoBehaviour
 			}
 		}
 	}
+
+    public void OnPointerExit(PointerEventData eventData)
+	{
+        if(eventData.pointerCurrentRaycast.gameObject != null)
+		{
+            if (eventData.pointerCurrentRaycast.gameObject.transform.IsChildOf(transform))
+            {
+                Debug.Log("IS CHILD");
+                return;
+            }
+        }
+
+        Debug.Log("Exited");
+
+        athlete.athleteGameObject.Highlight(false);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log("Entered");
+        athlete.athleteGameObject.Highlight(true);
+    }
 }

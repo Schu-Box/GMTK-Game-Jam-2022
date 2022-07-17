@@ -8,6 +8,7 @@ public class Team
 	public Color teamColor;
 
 	public List<Vector2Int> startingPositions;
+	public List<AthleteConfigData> athleteConfigs;
 
 	[HideInInspector] public RuntimeData runtimeData;
 	[HideInInspector] public TeamUIController teamController;
@@ -24,9 +25,9 @@ public class Team
 		runtimeData = data;
 		teamController = teamUIController;
 
-		for (int i = 0; i < startingPositions.Count; i++)
+		for (int i = 0; i < athleteConfigs.Count && i < startingPositions.Count; i++)
 		{
-			AddAthleteToRoster(new Athlete(this));
+			AddAthleteToRoster(new Athlete(athleteConfigs[i], this));
 		}
 	}
 
@@ -47,6 +48,8 @@ public class Team
 
 	public void StartTurn()
 	{
+		teamController.QueueDisplayTurnStart();
+
 		RollDice();
 
 		foreach(Athlete athlete in athletesInPlay)
@@ -82,7 +85,7 @@ public class Team
 
 	public void ScoreGoal(Athlete scorer, Ball ball)
 	{
-		Debug.Log("GOAL by " + scorer.name);
+		//Debug.Log("GOAL by " + scorer.name);
 		score++;
 
 		teamController.QueueDisplayScore(score);

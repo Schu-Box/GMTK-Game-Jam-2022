@@ -48,9 +48,9 @@ public class Tile
 
 		if(tileType == TileType.Goal)
 		{
-			//Debug.Log("Athlete entered goal, should not be allowed maybe");
+			Debug.Log("Athlete entered goal");
 
-			if(athlete.heldBall != null)
+			if (athlete.heldBall != null)
 			{
 				athlete.team.runtimeData.GetOppositeTeam(owner).ScoreGoal(athlete, athlete.heldBall);
 			}

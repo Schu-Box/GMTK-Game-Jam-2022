@@ -64,5 +64,42 @@ public class AthleteObject : MonoBehaviour
 		}
 
 		gameController.CompleteQueueActionAfterDelay(duration);
-	} 
+	}
+
+	private float speed = 10f;
+	private float pulseRange = 0.2f;
+	private bool highlightActive;
+	private Coroutine highlightCoroutine = null;
+
+	public void Highlight(bool highlight)
+	{
+		highlightActive = highlight;
+
+		if (highlight)
+		{
+			if (highlightCoroutine == null)
+				StartCoroutine(HighlightCoroutine());
+		}
+		else
+		{
+			transform.localScale = Vector3.one;
+		}
+	}
+
+	public IEnumerator HighlightCoroutine()
+	{
+		float startTime = Time.time;
+
+		WaitForFixedUpdate waiter = new WaitForFixedUpdate();
+		while(highlightActive)
+		{
+			Vector3 vec = new Vector3(Mathf.Sin((Time.time - startTime) * speed) * pulseRange + 1, Mathf.Sin((Time.time - startTime) * speed) * pulseRange + 1, Mathf.Sin((Time.time - startTime) * speed) * pulseRange + 1);
+
+			transform.localScale = vec;
+
+			yield return waiter;
+		}
+
+		highlightCoroutine = null;
+	}
 }

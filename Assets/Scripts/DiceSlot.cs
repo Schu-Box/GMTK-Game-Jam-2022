@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class DiceSlot
 {
-	public Athlete athlete;
-	public Athlete.Action action;
+	[HideInInspector] public Athlete athlete;
+	[HideInInspector] public Athlete.Action action;
+
+	public ActionType actionType;
 	public string description;
 
 	public List<int> allowedValues = new List<int>();
@@ -13,22 +15,46 @@ public class DiceSlot
 	public bool ballRequired;
 	public bool noBallRequired;
 
-	public bool active = true;
-	public Dice heldDice = null;
+	[HideInInspector] public bool active = true;
+	[HideInInspector] public Dice heldDice = null;
 
-	public DiceSlotObject gameObject; //I kinda like this but could be confusing?
+	[HideInInspector] public DiceSlotObject gameObject; //I kinda like this but could be confusing?
 
-	public DiceSlot(Athlete newAthlete, Athlete.Action newAction, string newDescription, List<int> newAllowedValues, bool ballReq = false, bool noBallReq = false)
+	//public DiceSlot(Athlete newAthlete, Athlete.Action newAction, string newDescription, List<int> newAllowedValues, bool ballReq = false, bool noBallReq = false)
+	//{
+	//	athlete = newAthlete;
+	//	action = newAction;
+	//	description = newDescription;
+
+	//	for (int i = 0; i < newAllowedValues.Count; i++)
+	//		allowedValues.Add(newAllowedValues[i]);
+
+	//	ballRequired = ballReq;
+	//	noBallRequired = noBallReq;
+	//}
+
+	public DiceSlot(DiceSlot template, Athlete initAthlete)
 	{
-		athlete = newAthlete;
-		action = newAction;
-		description = newDescription;
+		actionType = template.actionType;
+		description = template.description;
 
-		for (int i = 0; i < newAllowedValues.Count; i++)
-			allowedValues.Add(newAllowedValues[i]);
+		for (int i = 0; i < template.allowedValues.Count; i++)
+			allowedValues.Add(template.allowedValues[i]);
 
-		ballRequired = ballReq;
-		noBallRequired = noBallReq;
+		ballRequired = template.ballRequired;
+		noBallRequired = template.noBallRequired;
+
+		athlete = initAthlete;
+		switch (actionType)
+		{
+			default:
+			case ActionType.Move:
+				action = athlete.MoveToTile;
+				break;
+			case ActionType.Kick:
+				action = athlete.KickToTile;
+				break;
+		}
 	}
 
 	public void Activate(bool activate)

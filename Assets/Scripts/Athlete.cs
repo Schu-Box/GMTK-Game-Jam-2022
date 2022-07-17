@@ -21,12 +21,19 @@ public class Athlete
 	private List<Tile> movementQueue = new List<Tile>();
 	//Action action;
 
-	public Athlete(Team assignedTeam)
+	public Athlete(AthleteConfigData configData, Team assignedTeam)
 	{
 		team = assignedTeam;
 
-		diceSlots.Add(new DiceSlot(this, MoveToTile, "Move", new List<int> { 1, 2, 3, 4, 5, 6 }));
-		diceSlots.Add(new DiceSlot(this, KickToTile, "Kick", new List<int> { 1, 2, 3, 4, 5, 6 }, true));
+		//diceSlots.Add(new DiceSlot(ActionType.Move, "Move", new List<int> { 1, 2, 3, 4, 5, 6 }));
+		//diceSlots.Add(new DiceSlot(ActionType.Kick, "Kick", new List<int> { 1, 2, 3, 4, 5, 6 }, true));
+
+		foreach(DiceSlot diceSlot in configData.diceSlots)
+		{
+			diceSlots.Add(new DiceSlot(diceSlot, this));
+		}
+			
+
 		//diceSlots.Add(new DiceSlot(this, MoveHorizontal, "Move Forward 1", new List<int> { 1, 2, 3 }, new List<ValueModifier> { ValueModifier.ClampedTo1 }));
 		//diceSlots.Add(new DiceSlot(this, MoveVertical, "Move Up 1" + '\n' + "on even," + '\n' + "Move Down 1" + '\n' + "on odd", new List<int> { 3, 4, 5, 6 }, new List<ValueModifier> { ValueModifier.ClampedTo1, ValueModifier.OddBecomesNegative }));
 		//diceSlots.Add(new DiceSlot(this));
@@ -199,8 +206,6 @@ public class Athlete
 
 	public void PossessBall(Ball newBall)
 	{
-		heldBall = newBall;
-
 		newBall.AssignPossessor(this);
 	}
 

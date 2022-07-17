@@ -16,8 +16,9 @@ public class RuntimeData
 	public int columns = 8;
 	//public List<Athlete> athletesInPlay = new List<Athlete>();
 
+	public int turnsPerMatch = 20;
 	public bool playerTurn = false;
-	public int turn = 0;
+	public int turn = -1;
 
 	[HideInInspector] public GameController gameController;
 
@@ -36,7 +37,7 @@ public class RuntimeData
 		playerTeam.AssignAthletesToStartingPositions();
 		opponentTeam.AssignAthletesToStartingPositions();
 
-		NextTurn();
+		StartNextTurn();
 	}
 
 	public void SetField()
@@ -203,7 +204,24 @@ public class RuntimeData
 		}
 	}
 
-    public void NextTurn()
+	public void EndTurn()
+	{
+		if (playerTurn)
+			playerTeam.teamController.QueueDisplayTurnEnd();
+		else
+			opponentTeam.teamController.QueueDisplayTurnEnd();
+
+		if (turn >= turnsPerMatch)
+		{
+			EndMatch();
+		}
+		else
+		{
+			StartNextTurn();
+		}
+	}
+
+    public void StartNextTurn()
 	{
 		playerTurn = !playerTurn;
 		turn++;
@@ -212,6 +230,13 @@ public class RuntimeData
 			playerTeam.StartTurn();
 		else
 			opponentTeam.StartTurn();
+	}
+
+	public void EndMatch()
+	{
+		Debug.Log("Match is over!");
+
+		gameController.QueueDisplayEndMatch();
 	}
 
 	public Athlete activeAthlete = null;

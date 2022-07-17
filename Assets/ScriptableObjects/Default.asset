@@ -1,0 +1,163 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 552583fe57e2cee48903eaa42af0828b, type: 3}
+  m_Name: Default
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: diceSlots
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[DiceSlot, Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 1|DiceSlot, Assembly-CSharp
+    - Name: athlete
+      Entry: 6
+      Data: 
+    - Name: action
+      Entry: 6
+      Data: 
+    - Name: actionType
+      Entry: 3
+      Data: 0
+    - Name: description
+      Entry: 1
+      Data: Move
+    - Name: allowedValues
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: ballRequired
+      Entry: 5
+      Data: false
+    - Name: noBallRequired
+      Entry: 5
+      Data: false
+    - Name: active
+      Entry: 5
+      Data: false
+    - Name: heldDice
+      Entry: 6
+      Data: 
+    - Name: gameObject
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 3|DiceSlot, Assembly-CSharp
+    - Name: athlete
+      Entry: 6
+      Data: 
+    - Name: action
+      Entry: 6
+      Data: 
+    - Name: actionType
+      Entry: 3
+      Data: 1
+    - Name: description
+      Entry: 1
+      Data: Kick
+    - Name: allowedValues
+      Entry: 7
+      Data: 4|System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 6
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: ballRequired
+      Entry: 5
+      Data: true
+    - Name: noBallRequired
+      Entry: 5
+      Data: false
+    - Name: active
+      Entry: 5
+      Data: false
+    - Name: heldDice
+      Entry: 6
+      Data: 
+    - Name: gameObject
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  name: Default
+  sprite: {fileID: 21300000, guid: 518c0ace279179347ab58a9d117ae0d6, type: 3}

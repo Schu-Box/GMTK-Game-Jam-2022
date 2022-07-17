@@ -110,6 +110,15 @@ public class Ball
 
 	public void AssignPossessor(Athlete newPossessor)
 	{
+		if(newPossessor == null)
+		{
+			Debug.Log("assigning null possessor");
+		}
+		else
+		{
+			Debug.Log("assigning possessor " + newPossessor.name);
+		}
+
 		if (currentPossessor != null)
 			currentPossessor.heldBall = null;
 
@@ -118,6 +127,7 @@ public class Ball
 			currentTile_NoPossession = null;
 
 			currentPossessor = newPossessor;
+			newPossessor.heldBall = this;
 		}
 
 		ballGameObject.QueueDisplayPossession(newPossessor);
