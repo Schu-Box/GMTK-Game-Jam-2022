@@ -27,6 +27,20 @@ public class GameController : MonoBehaviour
 
     public List<Sprite> diceFaceSprites;
 
+    public AudioClip diceTraySlideOn;
+    public AudioClip diceTraySlideOff;
+    public AudioClip diceRoll;
+    public AudioClip diceSlotInserted;
+    public AudioClip diceFail;
+    public AudioClip tileSelected;
+    public AudioClip movement;
+    public AudioClip kick;
+    public AudioClip possessionGained;
+    public AudioClip tackle;
+    public AudioClip diceRoll_Single;
+    public AudioClip invalidDicePlacement;
+    public AudioClip goalScored;
+
     public static float animationSpeed_turnStart = 0.5f;
     public static float animationSpeed_turnEnd = 0.5f;
     public static float animationSpeed_DiceSlot = 0.2f;
@@ -47,11 +61,15 @@ public class GameController : MonoBehaviour
 
     private bool userInteractionAllowed = false;
 
+    private AudioSource audioSource;
+
     private void Start()
     {
         DeleteAllChidlren(ballGameObjectParent);
 
         StartCoroutine(DelayedStart());
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     private IEnumerator DelayedStart()
@@ -96,32 +114,43 @@ public class GameController : MonoBehaviour
 
     public void UserTriggerNextTurn()
     {
+        ClearInteractableTiles();
+
         runtimeData.EndTurn();
 
         if (runtimeData.playerTurn)
         {
-            AllowUserInteraction(true);
+            AwaitNextMove();
         }
 		else
 		{
-            AllowUserInteraction(false);
+            AwaitNextMove();
 		}
     }
 
-    public void AllowUserInteraction(bool allowed)
+    public void AwaitNextMove()
     {
-        ClearInteractableTiles();
-
-        userInteractionAllowed = allowed;
-
-        if (userInteractionAllowed)
+		if (runtimeData.GetActiveTeam().userControlled)
         {
-            foreach (Athlete athlete in runtimeData.playerTeam.athletesInPlay)
-                athlete.UpdateDiceSlots();
+            userInteractionAllowed = true;
 
-            foreach (Athlete athlete in runtimeData.opponentTeam.athletesInPlay)
-                athlete.UpdateDiceSlots();
+            //Wait for the user to make a move
         }
+        else
+		{
+            userInteractionAllowed = false;
+
+            ComputerAction computerAction = runtimeData.GetActiveTeam().DetermineNextMove();
+            if(computerAction != null)
+            {
+                runtimeData.PlayDiceInDiceSlot(computerAction.dice, computerAction.diceSlot);
+                runtimeData.ResolveActiveAthleteAction(computerAction.selectedTile);
+            }
+			else
+			{
+                runtimeData.EndTurn();
+			}
+		}
     }
 
     public void ClearInteractableTiles()
@@ -132,50 +161,63 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void UserPlacedDiceInSlot(DiceObject diceObject, DiceSlotObject slotObject)
+    public void UserPlacedDiceInSlot(DiceObject diceObject, DiceSlotObject diceSlotObject)
+	{
+        runtimeData.PlayDiceInDiceSlot(diceObject.dice, diceSlotObject.diceSlot);
+    }
+
+    public void QueueDisplayDicePlacedInSlot(DiceObject diceObject, DiceSlotObject slotObject)
+	{
+        AddToAnimationQueue(() => DisplayDicePlacedInSlot(diceObject, slotObject, animationSpeed_DiceSlot));
+	}
+    private void DisplayDicePlacedInSlot(DiceObject diceObject, DiceSlotObject slotObject, float duration)
     {
-        runtimeData.PlayDiceInDiceSlot(diceObject.dice, slotObject.diceSlot);
+        CompleteQueueActionAfterDelay(duration);
+
+        PlayAudio(diceSlotInserted);
+
+        diceObject.draggable.SetNewParent(slotObject.diceHolder);
+        diceObject.draggable.ReturnToParent();
 
         Athlete athlete = slotObject.diceSlot.athlete;
 
-        ClearInteractableTiles();
+		ClearInteractableTiles();
+		List<Tile> optionalTiles = runtimeData.GetValidTiles(athlete.currentTile, diceObject.dice.value);
 
-        List<Tile> optionalTiles = runtimeData.GetAdjacentTiles(athlete.currentTile, diceObject.dice.value);
-
-        foreach (Tile tile in optionalTiles)
-        {
-            tile.tileGameObject.Highlight(true);
-        }
+		if (slotObject.diceSlot.athlete.team.userControlled)
+		{
+			foreach (Tile tile in optionalTiles)
+                tile.tileGameObject.Highlight(true);
+		}
 
         if (optionalTiles.Count == 0)
-        {
             AddToAnimationQueue(() => DisplayFailedDice(diceObject, animationSpeed_DiceFail));
-        }
     }
 
     public void DisplayFailedDice(DiceObject diceObject, float duration)
 	{
+        PlayAudio(diceFail);
+
         diceObject.DisplayFail(duration);
 
         CompleteQueueActionAfterDelay(duration);
 
-        AwaitUserEndTurn();
-    }
+		CheckForNoDice();
+	}
 
     public void UserClickedTile(Tile clickedTile)
 	{
+        PlayAudio(tileSelected);
+
         ClearInteractableTiles();
 
         runtimeData.ResolveActiveAthleteAction(clickedTile);
 	}
 
-    public void AwaitUserEndTurn()
+    public void CheckForNoDice()
 	{
-        //Debug.Log(runtimeData.playerTeam.diceRolled.Count);
-
-        if(runtimeData.playerTeam.diceRolled.Count == 0)
+        if(runtimeData.GetActiveTeam().diceRolled.Count == 0)
 		{
-            //Debug.Log("User ran out of dice, end turn");
             runtimeData.EndTurn();
 		}            
 	}
@@ -224,17 +266,35 @@ public class GameController : MonoBehaviour
 
         if(actionQueue.Count == 0)
 		{
-            AllowUserInteraction(true);
+            AwaitNextMove();
 		}
     }
 
+    public void QueueDisplayTackle()
+	{
+        AddToAnimationQueue(() => DisplayTackle(0f)); //This is just for sound purposes
+	}
+    private void DisplayTackle(float duration)
+	{
+        Debug.Log("Tackle audio");
+
+        PlayAudio(tackle);
+
+        CompleteQueueActionAfterDelay(duration);
+	}
+
     public void DisplayEndTurn(float duration)
 	{
+        //PlayAudio(diceTraySlideOff);
+        PlayAudio(diceRoll); //This would ideally be done per dice roll, but it always happens at start of turn so whatever
+
         LeanTween.scale(turnsRemainingText.gameObject, Vector3.zero, duration).setEaseInExpo();
 	}
 
     public void DisplayStartTurn(float duration)
 	{
+        PlayAudio(diceTraySlideOn);
+
         turnsRemainingText.text = "Turns Remaining: " + (runtimeData.turnsPerMatch - runtimeData.turn + 1);
         LeanTween.scale(turnsRemainingText.gameObject, Vector3.one, duration).setEaseOutExpo();
     }
@@ -251,4 +311,10 @@ public class GameController : MonoBehaviour
 
         CompleteQueueActionAfterDelay(duration);
     }
+
+
+    public void PlayAudio(AudioClip clip, float volume = 1f)
+	{
+        audioSource.PlayOneShot(clip, volume);
+	}
 }

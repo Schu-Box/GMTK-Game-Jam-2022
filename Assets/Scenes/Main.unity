@@ -5009,6 +5009,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1618294434}
   - component: {fileID: 1618294433}
+  - component: {fileID: 1618294435}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -5032,7 +5033,7 @@ MonoBehaviour:
   opponentTeamController: {fileID: 1162388164}
   runtimeData:
     playerTeam:
-      teamColor: {r: 0.110137075, g: 0.32811627, b: 0.7075472, a: 1}
+      teamColor: {r: 0.1782218, g: 0.4218958, b: 0.8396226, a: 1}
       startingPositions:
       - {x: 1, y: 4}
       - {x: 2, y: 2}
@@ -5068,6 +5069,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5079,6 +5081,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5087,6 +5090,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 opponentTeam:
                   teamColor: {r: 0, g: 0, b: 0, a: 0}
                   startingPositions: []
@@ -5103,6 +5107,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5114,6 +5119,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5122,6 +5128,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 ballStartingPositions: []
                 rows: 6
                 columns: 8
@@ -5130,6 +5137,7 @@ MonoBehaviour:
                 turn: 0
                 gameController: {fileID: 0}
               teamController: {fileID: 0}
+              userControlled: 1
             opponentTeam:
               teamColor: {r: 0, g: 0, b: 0, a: 0}
               startingPositions: []
@@ -5151,6 +5159,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5162,6 +5171,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5170,6 +5180,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 opponentTeam:
                   teamColor: {r: 0, g: 0, b: 0, a: 0}
                   startingPositions: []
@@ -5186,6 +5197,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5197,6 +5209,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5205,6 +5218,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 ballStartingPositions: []
                 rows: 6
                 columns: 8
@@ -5213,6 +5227,7 @@ MonoBehaviour:
                 turn: 0
                 gameController: {fileID: 0}
               teamController: {fileID: 0}
+              userControlled: 1
             ballStartingPositions: []
             rows: 6
             columns: 8
@@ -5221,6 +5236,7 @@ MonoBehaviour:
             turn: 0
             gameController: {fileID: 0}
           teamController: {fileID: 0}
+          userControlled: 1
         opponentTeam:
           teamColor: {r: 0, g: 0, b: 0, a: 0}
           startingPositions: []
@@ -5247,6 +5263,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5258,6 +5275,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5266,6 +5284,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 opponentTeam:
                   teamColor: {r: 0, g: 0, b: 0, a: 0}
                   startingPositions: []
@@ -5282,6 +5301,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5293,6 +5313,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5301,6 +5322,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 ballStartingPositions: []
                 rows: 6
                 columns: 8
@@ -5309,6 +5331,7 @@ MonoBehaviour:
                 turn: 0
                 gameController: {fileID: 0}
               teamController: {fileID: 0}
+              userControlled: 1
             opponentTeam:
               teamColor: {r: 0, g: 0, b: 0, a: 0}
               startingPositions: []
@@ -5330,6 +5353,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5341,6 +5365,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5349,6 +5374,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 opponentTeam:
                   teamColor: {r: 0, g: 0, b: 0, a: 0}
                   startingPositions: []
@@ -5365,6 +5391,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5376,6 +5403,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5384,6 +5412,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 ballStartingPositions: []
                 rows: 6
                 columns: 8
@@ -5392,6 +5421,7 @@ MonoBehaviour:
                 turn: 0
                 gameController: {fileID: 0}
               teamController: {fileID: 0}
+              userControlled: 1
             ballStartingPositions: []
             rows: 6
             columns: 8
@@ -5400,6 +5430,7 @@ MonoBehaviour:
             turn: 0
             gameController: {fileID: 0}
           teamController: {fileID: 0}
+          userControlled: 1
         ballStartingPositions: []
         rows: 6
         columns: 8
@@ -5408,8 +5439,9 @@ MonoBehaviour:
         turn: 0
         gameController: {fileID: 0}
       teamController: {fileID: 0}
+      userControlled: 1
     opponentTeam:
-      teamColor: {r: 0.7264151, g: 0.07195621, b: 0.07195621, a: 1}
+      teamColor: {r: 0.8962264, g: 0.080322154, b: 0.080322154, a: 1}
       startingPositions:
       - {x: 7, y: 4}
       - {x: 6, y: 2}
@@ -5445,6 +5477,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5456,6 +5489,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5464,6 +5498,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 opponentTeam:
                   teamColor: {r: 0, g: 0, b: 0, a: 0}
                   startingPositions: []
@@ -5480,6 +5515,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5491,6 +5527,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5499,6 +5536,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 ballStartingPositions: []
                 rows: 6
                 columns: 8
@@ -5507,6 +5545,7 @@ MonoBehaviour:
                 turn: 0
                 gameController: {fileID: 0}
               teamController: {fileID: 0}
+              userControlled: 1
             opponentTeam:
               teamColor: {r: 0, g: 0, b: 0, a: 0}
               startingPositions: []
@@ -5528,6 +5567,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5539,6 +5579,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5547,6 +5588,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 opponentTeam:
                   teamColor: {r: 0, g: 0, b: 0, a: 0}
                   startingPositions: []
@@ -5563,6 +5605,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5574,6 +5617,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5582,6 +5626,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 ballStartingPositions: []
                 rows: 6
                 columns: 8
@@ -5590,6 +5635,7 @@ MonoBehaviour:
                 turn: 0
                 gameController: {fileID: 0}
               teamController: {fileID: 0}
+              userControlled: 1
             ballStartingPositions: []
             rows: 6
             columns: 8
@@ -5598,6 +5644,7 @@ MonoBehaviour:
             turn: 0
             gameController: {fileID: 0}
           teamController: {fileID: 0}
+          userControlled: 1
         opponentTeam:
           teamColor: {r: 0, g: 0, b: 0, a: 0}
           startingPositions: []
@@ -5624,6 +5671,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5635,6 +5683,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5643,6 +5692,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 opponentTeam:
                   teamColor: {r: 0, g: 0, b: 0, a: 0}
                   startingPositions: []
@@ -5659,6 +5709,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5670,6 +5721,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5678,6 +5730,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 ballStartingPositions: []
                 rows: 6
                 columns: 8
@@ -5686,6 +5739,7 @@ MonoBehaviour:
                 turn: 0
                 gameController: {fileID: 0}
               teamController: {fileID: 0}
+              userControlled: 1
             opponentTeam:
               teamColor: {r: 0, g: 0, b: 0, a: 0}
               startingPositions: []
@@ -5707,6 +5761,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5718,6 +5773,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5726,6 +5782,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 opponentTeam:
                   teamColor: {r: 0, g: 0, b: 0, a: 0}
                   startingPositions: []
@@ -5742,6 +5799,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     opponentTeam:
                       teamColor: {r: 0, g: 0, b: 0, a: 0}
                       startingPositions: []
@@ -5753,6 +5811,7 @@ MonoBehaviour:
                         playerTurn: 1
                         turn: 0
                       teamController: {fileID: 0}
+                      userControlled: 1
                     ballStartingPositions: []
                     rows: 6
                     columns: 8
@@ -5761,6 +5820,7 @@ MonoBehaviour:
                     turn: 0
                     gameController: {fileID: 0}
                   teamController: {fileID: 0}
+                  userControlled: 1
                 ballStartingPositions: []
                 rows: 6
                 columns: 8
@@ -5769,6 +5829,7 @@ MonoBehaviour:
                 turn: 0
                 gameController: {fileID: 0}
               teamController: {fileID: 0}
+              userControlled: 1
             ballStartingPositions: []
             rows: 6
             columns: 8
@@ -5777,6 +5838,7 @@ MonoBehaviour:
             turn: 0
             gameController: {fileID: 0}
           teamController: {fileID: 0}
+          userControlled: 1
         ballStartingPositions: []
         rows: 6
         columns: 8
@@ -5785,6 +5847,7 @@ MonoBehaviour:
         turn: 0
         gameController: {fileID: 0}
       teamController: {fileID: 0}
+      userControlled: 0
     ballStartingPositions:
     - {x: 4, y: 4}
     - {x: 4, y: 2}
@@ -5810,6 +5873,19 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0d058d36e26745346a912c8e55f3c118, type: 3}
   - {fileID: 21300000, guid: 56669f902182e984b92e86dd1def973d, type: 3}
   - {fileID: 21300000, guid: 3fad0e086dc167b42adec643c1c50610, type: 3}
+  diceTraySlideOn: {fileID: 8300000, guid: c40342ca8c6df1a458af13c73980c57b, type: 3}
+  diceTraySlideOff: {fileID: 8300000, guid: a1de60787d69ddd4b82db8da8c02d01c, type: 3}
+  diceRoll: {fileID: 8300000, guid: def59f5a29135264aaadefd10edf138d, type: 3}
+  diceSlotInserted: {fileID: 8300000, guid: 153e2265aee3cf248870d6a292802e3e, type: 3}
+  diceFail: {fileID: 8300000, guid: 4fe814d8bcbf44342b42d1d700ecf16c, type: 3}
+  tileSelected: {fileID: 8300000, guid: 89122b33af006d04a9d9e38740903f57, type: 3}
+  movement: {fileID: 8300000, guid: 7654fd9fdf46a90418425474bbad0725, type: 3}
+  kick: {fileID: 8300000, guid: fb9ecc5e446ba234e9ac143695999125, type: 3}
+  possessionGained: {fileID: 8300000, guid: 20d6ecd9d1d92eb4a98fc8bd6dfdc6f5, type: 3}
+  tackle: {fileID: 8300000, guid: 04822b949f4caf947bff14cef1b4949d, type: 3}
+  diceRoll_Single: {fileID: 8300000, guid: d2cf01837da0ef54ca7b5a1114eba255, type: 3}
+  invalidDicePlacement: {fileID: 8300000, guid: eb06fc4cffd7c4d4099a7d13fe8093b8, type: 3}
+  goalScored: {fileID: 8300000, guid: 4756d4e777ca52d4ab3c2c132f293ac5, type: 3}
   color_diceFail: {r: 0.21698111, g: 0.21698111, b: 0.21698111, a: 1}
 --- !u!4 &1618294434
 Transform:
@@ -5826,6 +5902,102 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1618294435
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618294432}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &1698490682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7205,6 +7377,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1482202429}
     m_Modifications:
+    - target: {fileID: 1294899339308916445, guid: 5812cdbbc5eab21448cde5c7f1f11704, type: 3}
+      propertyPath: m_Name
+      value: Athlete Image
+      objectReference: {fileID: 0}
     - target: {fileID: 2339953157703233355, guid: 5812cdbbc5eab21448cde5c7f1f11704, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -7364,6 +7540,10 @@ PrefabInstance:
     - target: {fileID: 3489369213136439699, guid: 5812cdbbc5eab21448cde5c7f1f11704, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843639196626095778, guid: 5812cdbbc5eab21448cde5c7f1f11704, type: 3}
+      propertyPath: m_Name
+      value: Jersey Image
       objectReference: {fileID: 0}
     - target: {fileID: 4128049308536791189, guid: 5812cdbbc5eab21448cde5c7f1f11704, type: 3}
       propertyPath: m_AnchorMax.y

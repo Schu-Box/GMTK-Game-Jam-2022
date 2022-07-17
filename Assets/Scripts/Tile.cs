@@ -86,4 +86,12 @@ public class Tile
 	{
 		return ballLooseInTile;
 	}
+
+	public bool ContainsBall()
+	{
+		if (ballLooseInTile != null || (occupier != null && occupier.heldBall != null))
+			return true;
+		else
+			return false;
+	}
 }

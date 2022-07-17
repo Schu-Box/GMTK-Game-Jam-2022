@@ -15,7 +15,7 @@ public class DiceSlot
 	public bool ballRequired;
 	public bool noBallRequired;
 
-	[HideInInspector] public bool active = true;
+	[HideInInspector] public bool locked = false;
 	[HideInInspector] public Dice heldDice = null;
 
 	[HideInInspector] public DiceSlotObject gameObject; //I kinda like this but could be confusing?
@@ -57,11 +57,13 @@ public class DiceSlot
 		}
 	}
 
-	public void Activate(bool activate)
+	public void Lock(bool isLocked)
 	{
-		active = activate;
-
-		gameObject.Activate(active);
+		if(locked != isLocked) //If the status has changed, update the visual
+		{
+			locked = isLocked;
+			gameObject.Lock(locked);
+		}
 	}
 
 	public void FillWithDice(Dice dice)

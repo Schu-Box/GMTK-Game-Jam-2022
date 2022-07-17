@@ -37,6 +37,8 @@ public class RuntimeData
 		playerTeam.AssignAthletesToStartingPositions();
 		opponentTeam.AssignAthletesToStartingPositions();
 
+		opponentTeam.teamController.QueueDisplayTurnEnd(); //HACK to play dice audio at a proper time
+
 		StartNextTurn();
 	}
 
@@ -87,7 +89,7 @@ public class RuntimeData
 		return new Vector2Int(0, 0);
 	}
 
-	public List<Tile> GetAdjacentTiles(Tile tile, int range, bool blockedByAthletes = false)
+	public List<Tile> GetValidTiles(Tile tile, int range, bool blockedByAthletes = false)
 	{
 		List<Tile> tiles = new List<Tile>();
 
@@ -249,19 +251,23 @@ public class RuntimeData
 		activeAction = slot.action;
 
 		activeAthlete.team.diceRolled.Remove(dice);
+
+		gameController.QueueDisplayDicePlacedInSlot(dice.diceGameObject, slot.gameObject);
 	}
 
 	public void ResolveActiveAthleteAction(Tile tile)
 	{
 		activeAction.Invoke(tile);
 
-		if (playerTurn)
-			gameController.AwaitUserEndTurn();
+		activeAthlete = null;
+		activeAction = null;
+
+		gameController.CheckForNoDice();
 	}
 
 	public void TackleAthlete(Athlete tackler, Athlete tacklee)
 	{
-		if(tacklee.heldBall != null && tackler.heldBall == null)
+		if (tacklee.heldBall != null && tackler.heldBall == null)
 		{
 			tackler.PossessBall(tacklee.heldBall);
 		}
@@ -275,5 +281,13 @@ public class RuntimeData
 			return opponentTeam;
 		else
 			return playerTeam;
+	}
+	
+	public Team GetActiveTeam()
+	{
+		if (playerTurn)
+			return playerTeam;
+		else
+			return opponentTeam;
 	}
 }

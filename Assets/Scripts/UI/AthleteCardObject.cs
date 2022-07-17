@@ -40,19 +40,19 @@ public class AthleteCardObject : MonoBehaviour, IPointerEnterHandler, IPointerEx
 		{
             if (eventData.pointerCurrentRaycast.gameObject.transform.IsChildOf(transform))
             {
-                Debug.Log("IS CHILD");
+                //Debug.Log("IS CHILD");
                 return;
             }
         }
 
-        Debug.Log("Exited");
+        //Debug.Log("Exited");
 
         athlete.athleteGameObject.Highlight(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("Entered");
+        //Debug.Log("Entered");
         athlete.athleteGameObject.Highlight(true);
     }
 }

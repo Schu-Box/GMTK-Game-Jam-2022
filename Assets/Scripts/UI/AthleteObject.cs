@@ -8,13 +8,25 @@ public class AthleteObject : MonoBehaviour
 	public Transform displayDiceHolder;
 	public Transform displayBallHolder;
 
+	public Image backgroundImage;
+	public Image foregroundImage;
+	public Image teamJerseyImage;
+
 	private GameController gameController;
 	private void Awake()
 	{
 		gameController = FindObjectOfType<GameController>();
 	}
 
-	//private  Image image;
+	public void SetForAthlete(Athlete athlete)
+	{
+		backgroundImage.sprite = athlete.sprite;
+		foregroundImage.sprite = athlete.sprite;
+		teamJerseyImage.sprite = athlete.sprite;
+
+		teamJerseyImage.color = athlete.team.teamColor;
+	}
+
 	public void FlipImage()
 	{
 		transform.eulerAngles = new Vector3(0, 180, 0);
@@ -27,6 +39,8 @@ public class AthleteObject : MonoBehaviour
 
 	public void DisplayMovement(TileObject tileObject, float speed)
 	{
+		gameController.PlayAudio(gameController.movement);
+
 		LeanTween.move(gameObject, tileObject.transform.position, speed).setEaseOutCubic();
 
 		gameController.CompleteQueueActionAfterDelay(speed);
@@ -39,6 +53,8 @@ public class AthleteObject : MonoBehaviour
 
 	private void DisplayRoll(Dice diceRoll, float durationGrow, float durationShow)
 	{
+		gameController.PlayAudio(gameController.diceRoll_Single);
+
 		DiceObject newDiceObject = Instantiate(gameController.diceGameObjectPrefab,displayDiceHolder).GetComponent<DiceObject>();
 		newDiceObject.Setup(diceRoll);
 		newDiceObject.transform.localScale = Vector3.zero;
@@ -56,6 +72,8 @@ public class AthleteObject : MonoBehaviour
 
 	private void DisplayDestroyDice(float duration)
 	{
+		Debug.Log("TOTO: Display dice shrink audio?");
+
 		for(int i = 0; i < displayDiceHolder.childCount; i++)
 		{
 			GameObject diceObject = displayDiceHolder.GetChild(i).gameObject;

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Athlete
 {
     public string name;
+	public Sprite sprite;
 
 	public Tile currentTile;
 
@@ -24,6 +25,9 @@ public class Athlete
 	public Athlete(AthleteConfigData configData, Team assignedTeam)
 	{
 		team = assignedTeam;
+
+		name = configData.name;
+		sprite = configData.sprite;
 
 		//diceSlots.Add(new DiceSlot(ActionType.Move, "Move", new List<int> { 1, 2, 3, 4, 5, 6 }));
 		//diceSlots.Add(new DiceSlot(ActionType.Kick, "Kick", new List<int> { 1, 2, 3, 4, 5, 6 }, true));
@@ -68,6 +72,9 @@ public class Athlete
 		kickedBall.AddToMovementQueue(newTile);
 
 		kickedBall.BeginMovement();
+
+		//TODO: This should happen outside of data script but we jamming
+		team.runtimeData.gameController.PlayAudio(team.runtimeData.gameController.kick);
 	}
 
 	public void AddToMovementQueue(Tile tile)
@@ -105,6 +112,8 @@ public class Athlete
 			athleteGameObject.QueueDisplayDestroyDice();
 			defender.athleteGameObject.QueueDisplayDestroyDice();
 
+			team.runtimeData.gameController.QueueDisplayTackle(); //Only for audio
+
 			if (defenderRoll.value > intruderRoll.value)
 			{
 				AbortMovementQueue();
@@ -134,6 +143,8 @@ public class Athlete
 		tile.AthleteEntered(this);
 
 		movementQueue.Remove(tile);
+
+		UpdateDiceSlots();
 	}
 
 	public Tile GetNearestAdjacentTile()
@@ -213,13 +224,21 @@ public class Athlete
 	{
 		foreach(DiceSlot diceSlot in diceSlots)
 		{
-			diceSlot.Activate(true);
+			if (diceSlot.ballRequired)
+			{
+				if (heldBall == null)
+					diceSlot.Lock(true);
+				else
+					diceSlot.Lock(false);
+			}
 
-			if (diceSlot.ballRequired && heldBall == null)
-				diceSlot.Activate(false);
-
-			if (diceSlot.noBallRequired && heldBall != null)
-				diceSlot.Activate(false);
+			if (diceSlot.noBallRequired)
+			{
+				if (heldBall == null)
+					diceSlot.Lock(false);
+				else
+					diceSlot.Lock(true);
+			}
 		}
 	}
 }

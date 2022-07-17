@@ -41,6 +41,7 @@ public class TeamUIController : MonoBehaviour
         newAthleteCardObject.SetForAthlete(athlete);
 
         AthleteObject newAthleteObject = Instantiate(gameController.athleteGameObjectPrefab, athleteGameObjectParent).GetComponent<AthleteObject>();
+        newAthleteObject.SetForAthlete(athlete);
         athlete.athleteGameObject = newAthleteObject;
 
         if (athlete.team == gameController.runtimeData.opponentTeam)
@@ -61,6 +62,8 @@ public class TeamUIController : MonoBehaviour
     private void DisplayScore(int newScore, float duration)
 	{
         scoreboardText.text = newScore.ToString();
+
+        gameController.PlayAudio(gameController.goalScored);
 
         //TODO: Animate
 

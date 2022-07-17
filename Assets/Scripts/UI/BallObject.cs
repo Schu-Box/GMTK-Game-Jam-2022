@@ -36,6 +36,8 @@ public class BallObject : MonoBehaviour
 		Vector3 newPosition;
 		if (athlete != null)
 		{
+			gameController.PlayAudio(gameController.possessionGained);
+
 			newPosition = athlete.athleteGameObject.displayBallHolder.position;
 			transform.SetParent(athlete.athleteGameObject.displayBallHolder);
 

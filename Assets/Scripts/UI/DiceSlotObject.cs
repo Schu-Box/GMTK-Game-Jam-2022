@@ -12,6 +12,8 @@ public class DiceSlotObject : MonoBehaviour, IDropHandler
 	public List<GameObject> diceImages;
 	public TextMeshProUGUI descriptionText;
 
+	public Image lockedImage;
+
 	public Transform diceHolder;
 
 	private GameController gameController;
@@ -36,9 +38,20 @@ public class DiceSlotObject : MonoBehaviour, IDropHandler
 		diceSlot.gameObject = this;
 	}
 
-	public void Activate(bool active)
+	public void Lock(bool isLocked)
 	{
-		gameObject.SetActive(active);
+		Debug.Log("Locking " + isLocked);
+
+		if (isLocked)
+		{
+			lockedImage.gameObject.SetActive(true);
+			lockedImage.transform.localScale = Vector3.zero;
+			LeanTween.scale(lockedImage.gameObject, Vector3.one, 0.2f).setEaseOutBack();
+		}
+		else
+		{
+			LeanTween.scale(lockedImage.gameObject, Vector3.zero, 0.2f).setEaseInExpo().setOnComplete(() => lockedImage.gameObject.SetActive(false));
+		}
 	}
 
 	public void OnDrop(PointerEventData pointerEventData)
@@ -55,13 +68,13 @@ public class DiceSlotObject : MonoBehaviour, IDropHandler
 		int value = diceObject.dice.value;
 		//Debug.Log("Dropped a " + value + " on DropZone ");
 
-		if (diceSlot.allowedValues.Contains(value) && diceSlot.athlete.team == diceObject.dice.owner && diceSlot.heldDice == null)
+		if (!diceSlot.locked && diceSlot.allowedValues.Contains(value) && diceSlot.athlete.team == diceObject.dice.owner && diceSlot.heldDice == null)
 		{
-			//diceSlot.TriggerWithValue(value);
-
-			diceObject.draggable.SetNewParent(diceHolder);
-
 			gameController.UserPlacedDiceInSlot(diceObject, this);
+		}
+		else
+		{
+			gameController.PlayAudio(gameController.invalidDicePlacement);
 		}
 	}
 }

@@ -31,7 +31,7 @@ public class TileObject : MonoBehaviour, IPointerClickHandler
 
 		if (tile.owner != null)
 		{
-			fillImage.color = tile.owner.teamColor;
+			fillImage.color = Color.Lerp(tile.owner.teamColor, Color.black, 0.3f);
 
 			//if (tile.owner == gameController.runtimeData.playerTeam)
 			//	transform.localEulerAngles = new Vector3(0, 0, 90);
